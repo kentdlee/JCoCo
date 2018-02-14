@@ -39,14 +39,14 @@ public class PyNone extends PyPrimitiveTypeAdapter {
 
         funs.put("__hash__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 return new PyInt(0);
             }
         });
 
         funs.put("__eq__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 2 argument, got " + args.size());
@@ -66,7 +66,7 @@ public class PyNone extends PyPrimitiveTypeAdapter {
 
         funs.put("__ne__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 2 argument, got " + args.size());
@@ -86,7 +86,7 @@ public class PyNone extends PyPrimitiveTypeAdapter {
 
         funs.put("__lt__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 2 argument, got " + args.size());
@@ -99,7 +99,7 @@ public class PyNone extends PyPrimitiveTypeAdapter {
 
         funs.put("__le__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 2 argument, got " + args.size());
@@ -113,7 +113,7 @@ public class PyNone extends PyPrimitiveTypeAdapter {
         });
         funs.put("__gt__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 2 argument, got " + args.size());
@@ -127,7 +127,7 @@ public class PyNone extends PyPrimitiveTypeAdapter {
         });
         funs.put("__ge__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 2 argument, got " + args.size());
@@ -142,7 +142,7 @@ public class PyNone extends PyPrimitiveTypeAdapter {
 
         funs.put("__float__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 1) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 1 argument, got " + args.size());
@@ -155,7 +155,7 @@ public class PyNone extends PyPrimitiveTypeAdapter {
 
         funs.put("__int__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 1) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 1 arguments, got " + args.size());
@@ -168,7 +168,7 @@ public class PyNone extends PyPrimitiveTypeAdapter {
 
         funs.put("__bool__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 1) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 1 arguments, got " + args.size());

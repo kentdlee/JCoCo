@@ -37,7 +37,7 @@ public class PyBuiltInInput extends PyCallableAdapter {
     }
     
     @Override 
-    public PyObject __call__(ArrayList<PyObject> args)  {
+    public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args)  {
         PyObject x;
         PyStr y;
         String line;

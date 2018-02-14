@@ -23,7 +23,7 @@ public class PyRangeType extends PyType {
     }
 
     @Override
-    public PyObject __call__(ArrayList<PyObject> args) {
+    public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
 
         if (args.size() == 0) {
             throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION, "TypeError: expected 1, 2, or 3 arguments, got " + args.size());

@@ -36,7 +36,7 @@ public class PyBuiltInRepr extends PyCallableAdapter {
     }
     
     @Override
-    public PyObject __call__(ArrayList<PyObject> args)  {
+    public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args)  {
         PyObject x;
         
         if (args.size() != 1) {
@@ -48,7 +48,7 @@ public class PyBuiltInRepr extends PyCallableAdapter {
         
         ArrayList<PyObject> callArgs = new ArrayList<PyObject>();
         
-        return x.callMethod("__repr__", callArgs);
+        return x.callMethod(callStack,"__repr__", callArgs);
     }
     
 }

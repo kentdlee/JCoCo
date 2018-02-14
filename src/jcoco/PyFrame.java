@@ -53,10 +53,12 @@ class PyFrame extends PyObjectAdapter {
     private final String[] cmp_op = {"__lt__", "__le__", "__eq__", "__ne__", "__gt__", "__ge__",
         "__contains__", "__notin__", "is__", "is_not", "__excmatch",
         "BAD"};
+    private PyCallStack callStack;
 
-    public PyFrame(PyCode code, ArrayList<PyObject> args, HashMap<String, PyObject> globals,
+    public PyFrame(PyCallStack callStack, PyCode code, ArrayList<PyObject> args, HashMap<String, PyObject> globals,
             ArrayList<PyObject> consts, HashMap<String, PyCell> cellvars) {
         super();
+        this.callStack = callStack;
         this.globals = globals;
         this.code = code;
         this.consts = consts;
@@ -135,13 +137,13 @@ class PyFrame extends PyObjectAdapter {
         return this.PC;
     }
 
-    public String hashMapToString(HashMap theMap) {
+    public String hashMapToString(PyCallStack callStack, HashMap theMap) {
         String s = "{";
 
         HashMap<String, PyObject> map = (HashMap<String, PyObject>) theMap;
 
         for (String key : map.keySet()) {
-            PyStr t = (PyStr) map.get(key).callMethod("__repr__", new ArrayList<PyObject>());
+            PyStr t = (PyStr) map.get(key).callMethod(callStack,"__repr__", new ArrayList<PyObject>());
             s += key + "=" + t.str() + ",";
         }
 
@@ -182,16 +184,16 @@ class PyFrame extends PyObjectAdapter {
                 JCoCo.stepOverInstructions = false;
                 exited = true;
             } else if (cmd.equals("callstack") || cmd.equals("c")) {
-                JCoCo.printCallStack(new ArrayList<PyFrame>(JCoCo.callStack));
+                callStack.printCallStack();
             } else if (cmd.equals("args") || cmd.equals("a")) {
                 System.out.println(opStack.toString());
             } else if (cmd.equals("type") || cmd.equals("t")) {
                 System.out.println("\n***********************************\nPC=" + PC + "\n***********************************");
                 System.out.println(this.code.prettyString("", true));
             } else if (cmd.equals("locals") || cmd.equals("l")) {
-                System.out.println(hashMapToString(locals));
+                System.out.println(hashMapToString(callStack,locals));
             } else if (cmd.equals("vars") || cmd.equals("v")) {
-                System.out.println(hashMapToString(cellvars));
+                System.out.println(hashMapToString(callStack,cellvars));
             } else {
                 System.out.println("Unknown Command");
             }
@@ -222,7 +224,7 @@ class PyFrame extends PyObjectAdapter {
         Iterator it;
         String name;
 
-        JCoCo.pushFrame(this);
+        callStack.pushFrame(this);
 
         while (true) {
             try {
@@ -299,7 +301,7 @@ class PyFrame extends PyObjectAdapter {
                         //arrat and it should be intialized to all comparison
                         //operators. This list will need to expand at some point.
                         //the cmp_op array is at the top of this module.
-                        w = u.callMethod(cmp_op[operand], args);
+                        w = u.callMethod(callStack,cmp_op[operand], args);
                         //do not need to delete args, garbage collection will handle it
                         this.opStack.push(w);
 
@@ -374,7 +376,7 @@ class PyFrame extends PyObjectAdapter {
                         args = new ArrayList<PyObject>();
                         args.add(v);
 
-                        w = u.callMethod("__add__", args);
+                        w = u.callMethod(callStack,"__add__", args);
 
                         this.opStack.push(w);
                         break;
@@ -383,7 +385,7 @@ class PyFrame extends PyObjectAdapter {
                         u = this.safetyPop();
                         args = new ArrayList<PyObject>();
                         args.add(v);
-                        w = u.callMethod("__sub__", args);
+                        w = u.callMethod(callStack,"__sub__", args);
                         this.opStack.push(w);
                         break;
                     case BINARY_MULTIPLY:
@@ -391,7 +393,7 @@ class PyFrame extends PyObjectAdapter {
                         u = this.safetyPop();
                         args = new ArrayList<PyObject>();
                         args.add(v);
-                        w = u.callMethod("__mul__", args);
+                        w = u.callMethod(callStack,"__mul__", args);
                         this.opStack.push(w);
                         break;
                     case BINARY_FLOOR_DIVIDE:
@@ -399,7 +401,7 @@ class PyFrame extends PyObjectAdapter {
                         u = this.safetyPop();
                         args = new ArrayList<PyObject>();
                         args.add(v);
-                        w = u.callMethod("__floordiv__", args);
+                        w = u.callMethod(callStack,"__floordiv__", args);
                         this.opStack.push(w);
                         break;
                     case BINARY_TRUE_DIVIDE:
@@ -407,7 +409,7 @@ class PyFrame extends PyObjectAdapter {
                         u = this.safetyPop();
                         args = new ArrayList<PyObject>();
                         args.add(v);
-                        w = u.callMethod("__truediv__", args);
+                        w = u.callMethod(callStack,"__truediv__", args);
                         this.opStack.push(w);
                         break;
                     case BINARY_MODULO:
@@ -415,7 +417,7 @@ class PyFrame extends PyObjectAdapter {
                         u = this.safetyPop();
                         args = new ArrayList<PyObject>();
                         args.add(v);
-                        w = u.callMethod("__mod__", args);
+                        w = u.callMethod(callStack,"__mod__", args);
                         this.opStack.push(w);
                         break;
                     case BINARY_POWER:
@@ -423,13 +425,13 @@ class PyFrame extends PyObjectAdapter {
                         u = this.safetyPop();
                         args = new ArrayList<PyObject>();
                         args.add(v);
-                        w = u.callMethod("__pow__", args);
+                        w = u.callMethod(callStack,"__pow__", args);
                         this.opStack.push(w);
                         break;
                     case GET_ITER:
                         u = this.safetyPop();
                         args = new ArrayList<PyObject>();
-                        v = u.callMethod("__iter__", args);
+                        v = u.callMethod(callStack,"__iter__", args);
                         this.opStack.push(v);
                         break;
                     case ROT_TWO:
@@ -442,7 +444,7 @@ class PyFrame extends PyObjectAdapter {
                         u = this.safetyPop();
                         args = new ArrayList<PyObject>();
                         try {
-                            v = u.callMethod("__next__", args);
+                            v = u.callMethod(callStack,"__next__", args);
                             this.opStack.push(u);
                             this.opStack.push(v);
                         } catch (PyException ex) {
@@ -463,7 +465,7 @@ class PyFrame extends PyObjectAdapter {
                             args.add(u);
                         }
                         u = this.safetyPop();
-                        v = u.callMethod("__call__", args);
+                        v = u.callMethod(callStack,"__call__", args);
                         this.opStack.push(v);
                         //don't need to delete args; garbage collection will handle it
                         break;
@@ -476,7 +478,7 @@ class PyFrame extends PyObjectAdapter {
                             JCoCo.stepOverInstructions = true;
                         }
                         u = safetyPop();
-                        JCoCo.popFrame();
+                        callStack.popFrame();
 
                         return u;
                     case LOAD_ATTR:
@@ -496,7 +498,7 @@ class PyFrame extends PyObjectAdapter {
                         args = new ArrayList<PyObject>();
                         args.add(u);
 
-                        w = v.callMethod("__getitem__", args);
+                        w = v.callMethod(callStack,"__getitem__", args);
                         this.opStack.push(w);
                         break;
                     case STORE_SUBSCR:
@@ -507,7 +509,7 @@ class PyFrame extends PyObjectAdapter {
                         args.add(w);
                         args.add(u);
 
-                        w = v.callMethod("__setitem__", args);
+                        w = v.callMethod(callStack,"__setitem__", args);
                         break;
                     case LOAD_CLOSURE:
                         //the free or cell vars in the code object give us the name of the value

@@ -55,19 +55,19 @@ public class PyList extends PyPrimitiveTypeAdapter {
     public String str() {
         String str = "[";
         ArrayList<PyObject> args = new ArrayList<PyObject>();
-        try {
-            for (int i = 0; i < this.data.size(); i++) {
+        for (int i = 0; i < this.data.size(); i++) {
+            // Creating a new call stack here is a trade-off. This simplifies
+            // the interface to the str() method, for instance. It only affects
+            // usage of the debugger. Exceptions will still have the full traceback
+            // but if the debugger is used, the call stack will stop at this call
+            // for calls to "__repr__" in this case.
+            str += ((PyStr) this.data.get(i).callMethod(new PyCallStack(), "__repr__", args)).str();
 
-                str += ((PyStr) this.data.get(i).callMethod("__repr__", args)).str();
-
-                if (i < data.size() - 1) {
-                    str += ", ";
-                }
+            if (i < data.size() - 1) {
+                str += ", ";
             }
-        } catch (PyException e) {
-            System.err.println(e.getMessage());
-            e.printTraceBack();
         }
+
         str += "]";
 
         return str;
@@ -78,7 +78,7 @@ public class PyList extends PyPrimitiveTypeAdapter {
 
         funs.put("__getitem__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 2 argument, got " + args.size());
@@ -92,7 +92,7 @@ public class PyList extends PyPrimitiveTypeAdapter {
         });
         funs.put("__setitem__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 3) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 3 arguments, got " + args.size());
@@ -112,7 +112,7 @@ public class PyList extends PyPrimitiveTypeAdapter {
         });
         funs.put("__len__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 1) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 1 arguments, got " + args.size());
@@ -124,7 +124,7 @@ public class PyList extends PyPrimitiveTypeAdapter {
         });
         funs.put("__iter__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 1) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 1 arguments, got " + args.size());
@@ -137,7 +137,7 @@ public class PyList extends PyPrimitiveTypeAdapter {
 
         funs.put("append", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 2 arguments, got " + args.size());
@@ -152,7 +152,7 @@ public class PyList extends PyPrimitiveTypeAdapter {
 
         funs.put("__add__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 2 arguments, got " + args.size());
@@ -175,7 +175,7 @@ public class PyList extends PyPrimitiveTypeAdapter {
 
         funs.put("__mul__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 2 arguments, got " + args.size());
@@ -202,7 +202,7 @@ public class PyList extends PyPrimitiveTypeAdapter {
 
         funs.put("__eq__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 2 arguments, got " + args.size());
@@ -224,7 +224,7 @@ public class PyList extends PyPrimitiveTypeAdapter {
 
                 for (int i = 0; i < self.data.size(); i++) {
                     newargs.add(other.data.get(i));
-                    PyBool result = (PyBool) self.data.get(i).callMethod("__eq__", newargs);
+                    PyBool result = (PyBool) self.data.get(i).callMethod(callStack, "__eq__", newargs);
                     if (!result.getVal()) {
                         return result;
                     }
@@ -239,14 +239,14 @@ public class PyList extends PyPrimitiveTypeAdapter {
 
         funs.put("__ne__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 2 arguments, got " + args.size());
                 }
 
                 PyList self = (PyList) args.get(args.size() - 1);
-                PyBool result = (PyBool) self.callMethod("__eq__", selflessArgs(args));
+                PyBool result = (PyBool) self.callMethod(callStack, "__eq__", selflessArgs(args));
                 boolean v = result.getVal();
 
                 if (v) {

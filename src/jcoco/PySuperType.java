@@ -26,14 +26,14 @@ public class PySuperType extends PyType {
     }
     
     @Override
-    public PyObject __call__(ArrayList<PyObject> args)  {
+    public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args)  {
         
         if (args.size() != 0) {
             throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                                     "TypeError: expected 0 argument, got "+args.size());
         }
         
-        PyFrame topFrame = JCoCo.getCallStack().peek();
+        PyFrame topFrame = callStack.peek();
         if (topFrame.getCode().getLocals().get(0).equals("self")) {
             PyObjectInst obj = (PyObjectInst)topFrame.getLocals().get("self");
             return new PySuper(obj);

@@ -32,7 +32,7 @@ public class PyBuildClass extends PyCallableAdapter {
     // call. The name of the class is at TOS. So, the name is at args[0] and the closure
     // is at args[1].
     @Override
-    public PyObject __call__(ArrayList<PyObject> args)  {
+    public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args)  {
         // This call method is passed two things. The PyFunction closure representing 
         // the class' function (that is used for class instantiation) and the name 
         // of the class. The name is at TOS and the function is at TOS1. 
@@ -72,7 +72,7 @@ public class PyBuildClass extends PyCallableAdapter {
         ArrayList<PyObject> classargs = new ArrayList<PyObject>();
         classargs.add(map);
         globals.put(name.str(), newClass);
-        fun.__call__(classargs);
+        fun.__call__(callStack, classargs);
  
         return newClass;
     }

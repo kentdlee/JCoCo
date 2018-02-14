@@ -21,5 +21,5 @@ import jcoco.PyException.ExceptionType;
 
 public interface PyCallable extends PyObject {
     
-    public PyObject __call__(ArrayList<PyObject> args) ;
+    public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) ;
 }

@@ -34,7 +34,7 @@ public class PyBuiltInOpen extends PyCallableAdapter {
     }
 
     @Override
-    public PyObject __call__(ArrayList<PyObject> args) {
+    public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
         ArrayList<PyObject> iterArgs = new ArrayList<PyObject>();
         PyStr mode = new PyStr("r");
         PyStr filename;

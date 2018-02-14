@@ -20,10 +20,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public interface PyObject {
-    public String str() ;
+    public String str();
     public PyType getType();
     
     public void set(String key, PyObject value) ;
     public PyObject get(String key) ;
-    public PyObject callMethod(String name, ArrayList<PyObject> args) ;
+    public PyObject callMethod(PyCallStack callStack, String name, ArrayList<PyObject> args) ;
 }

@@ -80,7 +80,7 @@ public class PyFunList extends PyPrimitiveTypeAdapter {
 
         funs.put("__getitem__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 2 argument, got " + args.size());
@@ -111,7 +111,7 @@ public class PyFunList extends PyPrimitiveTypeAdapter {
 
         funs.put("__len__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
 
                 if (args.size() != 1) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
@@ -130,7 +130,7 @@ public class PyFunList extends PyPrimitiveTypeAdapter {
 
         funs.put("__iter__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
 
                 if (args.size() != 1) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
@@ -145,7 +145,7 @@ public class PyFunList extends PyPrimitiveTypeAdapter {
 
         funs.put("__add__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
 
                 if (args.size() != 2) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
@@ -176,7 +176,7 @@ public class PyFunList extends PyPrimitiveTypeAdapter {
 
         funs.put("head", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
 
                 if (args.size() != 1) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
@@ -196,7 +196,7 @@ public class PyFunList extends PyPrimitiveTypeAdapter {
 
         funs.put("tail", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 1) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 1 argument, got " + args.size());
@@ -216,7 +216,7 @@ public class PyFunList extends PyPrimitiveTypeAdapter {
 
         funs.put("concat", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
 
                 if (args.size() != 1) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
@@ -239,7 +239,7 @@ public class PyFunList extends PyPrimitiveTypeAdapter {
 
         funs.put("__eq__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
 
                 if (args.size() != 2) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
@@ -269,7 +269,7 @@ public class PyFunList extends PyPrimitiveTypeAdapter {
                 while (tmp != null) {
                     newargs.add(otherTmp.getHead());
 
-                    PyBool result = (PyBool) tmp.getHead().callMethod("__eq__", newargs);
+                    PyBool result = (PyBool) tmp.getHead().callMethod(callStack,"__eq__", newargs);
                     newargs.remove(newargs.size() - 1);
 
                     if (!result.getVal()) {
@@ -286,7 +286,7 @@ public class PyFunList extends PyPrimitiveTypeAdapter {
 
         funs.put("__ne__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
 
                 if (args.size() != 2) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
@@ -295,7 +295,7 @@ public class PyFunList extends PyPrimitiveTypeAdapter {
 
                 PyFunList self = (PyFunList) args.get(args.size() - 1);
 
-                PyBool result = (PyBool) self.callMethod("__eq__", selflessArgs(args));
+                PyBool result = (PyBool) self.callMethod(callStack,"__eq__", selflessArgs(args));
                 boolean v = result.getVal();
 
                 if (v) {
@@ -308,7 +308,7 @@ public class PyFunList extends PyPrimitiveTypeAdapter {
 
         funs.put("__hash__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
 
                 if (args.size() != 1) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
@@ -321,7 +321,7 @@ public class PyFunList extends PyPrimitiveTypeAdapter {
                 int val;
 
                 while (current != null) {
-                    val = ((PyInt) (current.getHead().callMethod("__hash__", args))).getVal();
+                    val = ((PyInt) (current.getHead().callMethod(callStack,"__hash__", args))).getVal();
 
                     total = (total + (val % (Integer.MAX_VALUE / 2))) % (Integer.MAX_VALUE / 2);
                     current = current.getTail();

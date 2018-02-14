@@ -40,9 +40,9 @@ public class PyMethod extends PyCallableAdapter {
     }
     
     @Override
-    public PyObject __call__(ArrayList<PyObject> args)  {
+    public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args)  {
         args.add(this.self);
-        PyObject result = fun.__call__(args);
+        PyObject result = fun.__call__(callStack, args);
         //take self back out of args because when a method
         //is called no one would suspect that a side-effect
         //was that args was mutated.

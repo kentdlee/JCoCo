@@ -42,7 +42,12 @@ class PyTuple extends PyPrimitiveTypeAdapter {
 
         try {
             for (int i = 0; i < this.data.size(); i++) {
-                str += (this.data.get(i).callMethod("__repr__", args)).str();
+                // Creating a new call stack here is a trade-off. This simplifies
+                // the interface to the str() method, for instance. It only affects
+                // usage of the debugger. Exceptions will still have the full traceback
+                // but if the debugger is used, the call stack will stop at this call
+                // for calls to "__repr__" in this case.
+                str += (this.data.get(i).callMethod(new PyCallStack(), "__repr__", args)).str();
 
                 if (i < this.data.size() - 1) {
                     str += ", ";
@@ -74,7 +79,7 @@ class PyTuple extends PyPrimitiveTypeAdapter {
 
         funs.put("__hash__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 1) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 1 arguments, got " + args.size());
@@ -87,7 +92,7 @@ class PyTuple extends PyPrimitiveTypeAdapter {
                 PyTuple self = (PyTuple) args.get(args.size() - 1);
 
                 for (k = 0; k < self.data.size(); k++) {
-                    val = ((PyInt) (self.data.get(k).callMethod("__hash__", args))).getVal();
+                    val = ((PyInt) (self.data.get(k).callMethod(callStack, "__hash__", args))).getVal();
                     total = (total + (val % Integer.MAX_VALUE / 2) % (Integer.MAX_VALUE / 2));
                 }
 
@@ -99,7 +104,7 @@ class PyTuple extends PyPrimitiveTypeAdapter {
         funs.put(
                 "__getitem__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args
             ) {
                 if (args.size() != 2) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION,
@@ -118,7 +123,7 @@ class PyTuple extends PyPrimitiveTypeAdapter {
         funs.put(
                 "__len__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args
             ) {
                 if (args.size() != 1) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION,
@@ -135,7 +140,7 @@ class PyTuple extends PyPrimitiveTypeAdapter {
         funs.put(
                 "__iter__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args
             ) {
                 if (args.size() != 1) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION,
