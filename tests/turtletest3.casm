@@ -1,0 +1,88 @@
+Function: main/0
+    Function: dragged/2
+    Constants: None
+    Locals: x, y
+    FreeVars: screen, t
+    Globals: goto, update
+    BEGIN
+              LOAD_DEREF                     1
+              LOAD_ATTR                      0
+              LOAD_FAST                      0
+              LOAD_FAST                      1
+              CALL_FUNCTION                  2
+              POP_TOP                  
+              LOAD_DEREF                     0
+              LOAD_ATTR                      1
+              CALL_FUNCTION                  0
+              POP_TOP                  
+              LOAD_CONST                     0
+              RETURN_VALUE             
+    END
+Constants: None, code(dragged), 1, 0, 2000, "green", 0.5, -1, -1
+Locals: dragged
+CellVars: screen, t
+Globals: turtle, Turtle, ondrag, getscreen, tracer, screensize, setworldcoordinates, goto, update, mainloop
+BEGIN
+          LOAD_GLOBAL                    0
+          LOAD_ATTR                      1
+          CALL_FUNCTION                  0
+          STORE_DEREF                    1
+          LOAD_CLOSURE                   0
+          LOAD_CLOSURE                   1
+          BUILD_TUPLE                    2
+          LOAD_CONST                     1
+          MAKE_CLOSURE                   0
+          STORE_FAST                     0
+          LOAD_DEREF                     1
+          LOAD_ATTR                      2
+          LOAD_FAST                      0
+          LOAD_CONST                     2
+          CALL_FUNCTION                  2
+          POP_TOP                  
+          LOAD_DEREF                     1
+          LOAD_ATTR                      3
+          CALL_FUNCTION                  0
+          STORE_DEREF                    0
+          LOAD_DEREF                     0
+          LOAD_ATTR                      4
+          LOAD_CONST                     3
+          CALL_FUNCTION                  1
+          POP_TOP                  
+          LOAD_DEREF                     0
+          LOAD_ATTR                      5
+          LOAD_CONST                     4
+          LOAD_CONST                     4
+          LOAD_CONST                     5
+          CALL_FUNCTION                  3
+          POP_TOP                  
+          LOAD_DEREF                     0
+          LOAD_ATTR                      6
+          LOAD_CONST                     7
+          LOAD_CONST                     8
+          LOAD_CONST                     2
+          LOAD_CONST                     2
+          CALL_FUNCTION                  4
+          POP_TOP                  
+          LOAD_DEREF                     1
+          LOAD_ATTR                      7
+          LOAD_CONST                     3
+          LOAD_CONST                     3
+          CALL_FUNCTION                  2
+          POP_TOP                  
+          LOAD_DEREF                     1
+          LOAD_ATTR                      7
+          LOAD_CONST                     6
+          LOAD_CONST                     6
+          CALL_FUNCTION                  2
+          POP_TOP                  
+          LOAD_DEREF                     0
+          LOAD_ATTR                      8
+          CALL_FUNCTION                  0
+          POP_TOP                  
+          LOAD_DEREF                     0
+          LOAD_ATTR                      9
+          CALL_FUNCTION                  0
+          POP_TOP                  
+          LOAD_CONST                     0
+          RETURN_VALUE             
+END

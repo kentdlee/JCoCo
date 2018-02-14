@@ -1,0 +1,258 @@
+Function: main/0
+Constants: None, 0, 360, 45, 30, 20, 50, 100, "red", 10, "blue", "Hello World!!!!!", "right", "Arial", 24, "bold", 7, 75, 200, -50, -100, False, ('Arial', 24, 'bold'), -75, -200
+Locals: t, s, stamp_id, i, screen
+Globals: turtle, Turtle, speed, rt, left, right, fd, dot, home, ht, print, isvisible, isdown, goto, pencolor, hideturtle, width, begin_fill, circle, end_fill, write, False, stamp, range, undo, clearstamps, getscreen, exitonclick
+BEGIN
+          LOAD_GLOBAL                    0
+          LOAD_ATTR                      1
+          CALL_FUNCTION                  0
+          STORE_FAST                     0
+          LOAD_FAST                      0
+          LOAD_ATTR                      2
+          LOAD_CONST                     1
+          CALL_FUNCTION                  1
+          POP_TOP                  
+          LOAD_FAST                      0
+          LOAD_ATTR                      3
+          LOAD_CONST                     2
+          CALL_FUNCTION                  1
+          POP_TOP                  
+          LOAD_FAST                      0
+          LOAD_ATTR                      4
+          LOAD_CONST                     2
+          CALL_FUNCTION                  1
+          POP_TOP                  
+          LOAD_FAST                      0
+          LOAD_ATTR                      5
+          LOAD_CONST                     3
+          CALL_FUNCTION                  1
+          POP_TOP                  
+          LOAD_FAST                      0
+          LOAD_ATTR                      6
+          LOAD_CONST                     4
+          CALL_FUNCTION                  1
+          POP_TOP                  
+          LOAD_FAST                      0
+          LOAD_ATTR                      7
+          LOAD_CONST                     5
+          CALL_FUNCTION                  1
+          POP_TOP                  
+          LOAD_FAST                      0
+          LOAD_ATTR                      8
+          CALL_FUNCTION                  0
+          POP_TOP                  
+          LOAD_FAST                      0
+          LOAD_ATTR                      9
+          CALL_FUNCTION                  0
+          POP_TOP                  
+          LOAD_GLOBAL                   10
+          LOAD_FAST                      0
+          LOAD_ATTR                     11
+          CALL_FUNCTION                  0
+          CALL_FUNCTION                  1
+          POP_TOP                  
+          LOAD_GLOBAL                   10
+          LOAD_FAST                      0
+          LOAD_ATTR                     12
+          CALL_FUNCTION                  0
+          CALL_FUNCTION                  1
+          POP_TOP                  
+          LOAD_FAST                      0
+          LOAD_ATTR                      4
+          LOAD_CONST                     3
+          CALL_FUNCTION                  1
+          POP_TOP                  
+          LOAD_FAST                      0
+          LOAD_ATTR                     13
+          LOAD_CONST                    19
+          LOAD_CONST                    20
+          CALL_FUNCTION                  2
+          POP_TOP                  
+          LOAD_FAST                      0
+          LOAD_ATTR                      8
+          CALL_FUNCTION                  0
+          POP_TOP                  
+          LOAD_GLOBAL                    0
+          LOAD_ATTR                      1
+          CALL_FUNCTION                  0
+          STORE_FAST                     1
+          LOAD_FAST                      1
+          LOAD_ATTR                     14
+          LOAD_CONST                     8
+          CALL_FUNCTION                  1
+          POP_TOP                  
+          LOAD_FAST                      1
+          LOAD_ATTR                     15
+          CALL_FUNCTION                  0
+          POP_TOP                  
+          LOAD_FAST                      1
+          LOAD_ATTR                     16
+          LOAD_CONST                     9
+          CALL_FUNCTION                  1
+          POP_TOP                  
+          LOAD_FAST                      1
+          LOAD_ATTR                      4
+          LOAD_CONST                     3
+          CALL_FUNCTION                  1
+          POP_TOP                  
+          LOAD_FAST                      1
+          LOAD_ATTR                     13
+          LOAD_CONST                     1
+          LOAD_CONST                     1
+          CALL_FUNCTION                  2
+          POP_TOP                  
+          LOAD_FAST                      1
+          LOAD_ATTR                     15
+          CALL_FUNCTION                  0
+          POP_TOP                  
+          LOAD_FAST                      1
+          LOAD_ATTR                     17
+          CALL_FUNCTION                  0
+          POP_TOP                  
+          LOAD_FAST                      1
+          LOAD_ATTR                     18
+          LOAD_CONST                     7
+          CALL_FUNCTION                  1
+          POP_TOP                  
+          LOAD_FAST                      1
+          LOAD_ATTR                     19
+          CALL_FUNCTION                  0
+          POP_TOP                  
+          LOAD_FAST                      1
+          LOAD_ATTR                     14
+          LOAD_CONST                    10
+          CALL_FUNCTION                  1
+          POP_TOP                  
+          LOAD_FAST                      1
+          LOAD_ATTR                     20
+          LOAD_CONST                    11
+          LOAD_CONST                    21
+          LOAD_CONST                    12
+          LOAD_CONST                    22
+          CALL_FUNCTION                  4
+          POP_TOP                  
+          LOAD_FAST                      0
+          LOAD_ATTR                     15
+          CALL_FUNCTION                  0
+          POP_TOP                  
+          LOAD_FAST                      0
+          LOAD_ATTR                      8
+          CALL_FUNCTION                  0
+          POP_TOP                  
+          LOAD_FAST                      0
+          LOAD_ATTR                      6
+          LOAD_CONST                     6
+          CALL_FUNCTION                  1
+          POP_TOP                  
+          LOAD_FAST                      0
+          LOAD_ATTR                     22
+          CALL_FUNCTION                  0
+          STORE_FAST                     2
+          SETUP_LOOP               label02
+          LOAD_GLOBAL                   23
+          LOAD_CONST                    16
+          CALL_FUNCTION                  1
+          GET_ITER                 
+label00:  FOR_ITER                 label01
+          STORE_FAST                     3
+          LOAD_FAST                      0
+          LOAD_ATTR                      6
+          LOAD_CONST                     9
+          CALL_FUNCTION                  1
+          POP_TOP                  
+          LOAD_FAST                      0
+          LOAD_ATTR                      3
+          LOAD_CONST                     6
+          CALL_FUNCTION                  1
+          POP_TOP                  
+          LOAD_FAST                      0
+          LOAD_ATTR                     22
+          CALL_FUNCTION                  0
+          STORE_FAST                     2
+          JUMP_ABSOLUTE            label00
+label01:  POP_BLOCK                
+label02:  LOAD_FAST                      0
+          LOAD_ATTR                     24
+          CALL_FUNCTION                  0
+          POP_TOP                  
+          LOAD_FAST                      0
+          LOAD_ATTR                     25
+          CALL_FUNCTION                  0
+          POP_TOP                  
+          LOAD_FAST                      0
+          LOAD_ATTR                      8
+          CALL_FUNCTION                  0
+          POP_TOP                  
+          LOAD_FAST                      0
+          LOAD_ATTR                     13
+          LOAD_CONST                    23
+          LOAD_CONST                     7
+          CALL_FUNCTION                  2
+          POP_TOP                  
+          SETUP_LOOP               label05
+          LOAD_GLOBAL                   23
+          LOAD_CONST                    16
+          CALL_FUNCTION                  1
+          GET_ITER                 
+label03:  FOR_ITER                 label04
+          STORE_FAST                     3
+          LOAD_FAST                      0
+          LOAD_ATTR                      6
+          LOAD_CONST                     9
+          CALL_FUNCTION                  1
+          POP_TOP                  
+          LOAD_FAST                      0
+          LOAD_ATTR                      3
+          LOAD_CONST                     6
+          CALL_FUNCTION                  1
+          POP_TOP                  
+          LOAD_FAST                      0
+          LOAD_ATTR                     22
+          CALL_FUNCTION                  0
+          STORE_FAST                     2
+          JUMP_ABSOLUTE            label03
+label04:  POP_BLOCK                
+label05:  LOAD_FAST                      0
+          LOAD_ATTR                     13
+          LOAD_CONST                    24
+          LOAD_CONST                    18
+          CALL_FUNCTION                  2
+          POP_TOP                  
+          SETUP_LOOP               label08
+          LOAD_GLOBAL                   23
+          LOAD_CONST                    16
+          CALL_FUNCTION                  1
+          GET_ITER                 
+label06:  FOR_ITER                 label07
+          STORE_FAST                     3
+          LOAD_FAST                      0
+          LOAD_ATTR                      6
+          LOAD_CONST                     9
+          CALL_FUNCTION                  1
+          POP_TOP                  
+          LOAD_FAST                      0
+          LOAD_ATTR                      3
+          LOAD_CONST                     6
+          CALL_FUNCTION                  1
+          POP_TOP                  
+          LOAD_FAST                      0
+          LOAD_ATTR                     22
+          CALL_FUNCTION                  0
+          STORE_FAST                     2
+          JUMP_ABSOLUTE            label06
+label07:  POP_BLOCK                
+label08:  LOAD_FAST                      0
+          LOAD_ATTR                     24
+          CALL_FUNCTION                  0
+          POP_TOP                  
+          LOAD_FAST                      0
+          LOAD_ATTR                     26
+          CALL_FUNCTION                  0
+          STORE_FAST                     4
+          LOAD_FAST                      4
+          LOAD_ATTR                     27
+          CALL_FUNCTION                  0
+          POP_TOP                  
+          LOAD_CONST                     0
+          RETURN_VALUE             
+END

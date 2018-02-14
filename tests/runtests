@@ -1,0 +1,69 @@
+#!/Users/leekent/anaconda3/bin/python3
+
+import os
+
+
+
+def main():
+
+	needsInput = { \
+		"evens" : " << EOF \n6\nEOF", 
+		"exception" : "<< EOF \n5\n0\nEOF",
+		"except" : "<< EOF \n5\n0\nEOF",
+		"factorial" : "<< EOF \n5\nEOF",
+		"fib" : "<< EOF \n10\nEOF",
+		"inputoutput" : "<< EOF\n5\n20\nEOF",
+		"iotest": "<< EOF\nKent\n20\nEOF",
+		"iterators" : "<< EOF\n1 2 3 4 5\nEOF",
+		"listiter" : "<< EOF\n1 2 3 4 5\nEOF",
+		"nestedfun2" : "<< EOF\n1 2 3 4 5\nEOF",
+		"nestedfun" : "<< EOF\n1 2 3 4 5\n6\nEOF",
+		"rangeiter" : "<< EOF\n1 2 3 4 5\nEOF",		
+		"split" : "<< EOF\n1 2 3 4 5\nEOF",
+		"striter" : "<< EOF\nhow are you doing?\nEOF",
+		"sumFirstN" : "<< EOF\n10\nEOF",
+		"test26" : "<< EOF\n10\nEOF",
+		"test40" : "<< EOF\nthis is a list of words\nEOF",
+		"test9" : "<< EOF\n5\nEOF",
+		"testCoCo1" : "<< EOF\n5\n6\nEOF",
+		"testsplit" : "<< EOF\nhow are you\nEOF"
+
+	}
+
+	skipList = ["disassembler.py"]
+	stream = os.popen("ls -1 *.py")
+	for s in stream:
+		filename = s.strip()
+		if not filename in skipList:
+			print("************ TESTING " + filename + " *************")
+
+			baseName = filename.split(".")[0]
+			if baseName in needsInput:
+				theInput = needsInput[baseName]
+			else:
+				theInput = ""
+
+			command = "python3.2 " + filename + " > pythonoutput.txt " + theInput 
+			print ("RUNNING COMMAND:", command)
+			os.system(command)
+
+			command = "python3.2 " + filename + " casm > " + baseName + ".casm"
+			print ("RUNNING COMMAND:", command)
+			os.system(command)
+
+			command = "coco " + baseName + ".casm "  " > casmoutput.txt " + theInput
+			print ("RUNNING COMMAND:", command)
+			os.system(command)
+
+			command = "diff pythonoutput.txt casmoutput.txt"
+			print ("RUNNING COMMAND:", command)
+			os.system(command)
+
+			input("Press Enter to Continue")
+
+			command = "rm pythonoutput.txt casmoutput.txt "  + baseName + ".casm"
+			print ("RUNNING COMMAND:", command)
+			os.system(command)
+
+if __name__ == "__main__":
+	main()
