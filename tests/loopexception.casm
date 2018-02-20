@@ -1,0 +1,59 @@
+Function: main/0
+Constants: None, "Please enter an integer:", 1, -1, -1
+Locals: x, total, i, ex
+Globals: int, input, range, Exception, print
+BEGIN
+          LOAD_GLOBAL                    0
+          LOAD_GLOBAL                    1
+          LOAD_CONST                     1
+          CALL_FUNCTION                  1
+          CALL_FUNCTION                  1
+          STORE_FAST                     0
+          LOAD_FAST                      0
+          STORE_FAST                     1
+          SETUP_LOOP               label05
+          LOAD_GLOBAL                    2
+          LOAD_FAST                      0
+          LOAD_CONST                     3
+          LOAD_CONST                     4
+          CALL_FUNCTION                  3
+          GET_ITER                 
+label00:  FOR_ITER                 label04
+          STORE_FAST                     2
+          SETUP_EXCEPT             label01
+          LOAD_FAST                      1
+          LOAD_FAST                      2
+          BINARY_TRUE_DIVIDE       
+          STORE_FAST                     1
+          POP_BLOCK                
+          JUMP_ABSOLUTE            label00
+label01:  DUP_TOP                  
+          LOAD_GLOBAL                    3
+          COMPARE_OP                    10
+          POP_JUMP_IF_FALSE        label03
+          POP_TOP                  
+          STORE_FAST                     3
+          POP_TOP                  
+          SETUP_FINALLY            label02
+          LOAD_GLOBAL                    4
+          LOAD_FAST                      3
+          CALL_FUNCTION                  1
+          POP_TOP                  
+          POP_BLOCK                
+          POP_EXCEPT               
+          LOAD_CONST                     0
+label02:  LOAD_CONST                     0
+          STORE_FAST                     3
+          DELETE_FAST                    3
+          END_FINALLY              
+          JUMP_ABSOLUTE            label00
+label03:  END_FINALLY              
+          JUMP_ABSOLUTE            label00
+label04:  POP_BLOCK                
+label05:  LOAD_GLOBAL                    4
+          LOAD_FAST                      1
+          CALL_FUNCTION                  1
+          POP_TOP                  
+          LOAD_CONST                     0
+          RETURN_VALUE             
+END
