@@ -638,8 +638,13 @@ class PyFrame extends PyObjectAdapter {
                         }
                         this.opStack.push(this.opStack.top());
                         break;
-                    case SETUP_FINALLY:
+                   case SETUP_FINALLY:
                         this.blockStack.push(-1 * operand);
+                        // We put a marker on the operand stack in case an exception occurs. If
+                        // a marker is popped (by safetyPop) it is thrown away so that the machine 
+                        // does not see the marker. When we get to the END_FINALLY we'll clean up 
+                        // the operand stack of anything left.
+                        opStack.push(new PyMarker());
                         break;
                     case END_FINALLY:
                         if (!handled) {
@@ -655,6 +660,15 @@ class PyFrame extends PyObjectAdapter {
                             this.blockStack.pop();
 
                             throw ((PyException) u);
+                        }
+                        // when the SETUP_FINALLY was executed, a marker was added to the operand stack
+                        // in case an exception occurrred. Now that we are done processing the finally, 
+                        // we clean up the operand stack to this point. 
+                        if (!opStack.isEmpty()) {
+                            PyObject obj = opStack.pop();
+                            while (!obj.str().equals("Marker") && !opStack.isEmpty()) {
+                                obj = opStack.pop();
+                            }
                         }
                         break;
                     case POP_EXCEPT:
