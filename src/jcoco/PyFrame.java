@@ -136,13 +136,30 @@ class PyFrame extends PyObjectAdapter {
     }
 
     public String hashMapToString(HashMap theMap) {
+        // temporarily turn off stepping if it is on.
+        boolean debugging = JCoCo.stepOverInstructions;
+        JCoCo.stepOverInstructions = false;
+        int callStackSize = JCoCo.callStack.size();
+
         String s = "{";
 
         HashMap<String, PyObject> map = (HashMap<String, PyObject>) theMap;
+        PyStr t = null;
+        String t_str = null;
 
         for (String key : map.keySet()) {
-            PyStr t = (PyStr) map.get(key).callMethod("__repr__", new ArrayList<PyObject>());
-            s += key + "=" + t.str() + ",";
+            try {
+                t = (PyStr) map.get(key).callMethod("__repr__", new ArrayList<PyObject>());
+                t_str = t.str();
+            } catch (PyException ex) {
+                JCoCo.callStack.pop(); // get rid of bad stack frame put there by debugger.
+                try {
+                    t_str = ((PyObject) map.get(key)).str();
+                } catch (PyException ex2) {
+                    t_str = "<" + ((PyObject) map.get(key)).getType() + " object at 0x" + Integer.toHexString(System.identityHashCode(this)) + ">";
+                }
+            }
+            s += key + "=" + t_str + ",";
         }
 
         if (s.length() > 1) {
@@ -151,13 +168,20 @@ class PyFrame extends PyObjectAdapter {
 
         s += "}";
 
+        while (JCoCo.callStack.size() > callStackSize) {
+            JCoCo.callStack.pop(); // restore call stack after debugging.
+        }
+        
+        JCoCo.stepOverInstructions = debugging;
+        
+
         return s;
     }
 
     public void break_point_command_loop() {
         boolean exited = false;
         if (printDebuggerPrompt) {
-            System.out.println("Entering Interactive Debugger...");
+            System.out.println("Entering Interactive Debugger in function " + this.code.getName() + " ...");
         }
 
         while (!exited) {
@@ -168,10 +192,12 @@ class PyFrame extends PyObjectAdapter {
             printDebuggerPrompt = true; // for next time we get in here
 
             if (cmd.equals("h") || cmd.equals("help")) {
-                System.out.println("  (h)elp:      print this help message\n  (c)allstack: print the current run-time stack\n  (t)ype: print the code\n  (a)rgs:      print the contents of the operand stack\n  (l)ocals:    print the contents of the locals\n  (v)ars:      print the contents of the cellvars\n  (s)tep:      execute one instruction\n  (o)ut:       Step out of the current function call\n  (r)un:       continue execution");
+                System.out.println("  (h)elp:      print this help message\n  (c)allstack: print the current run-time stack\n  (t)ype:      print the code\n  (a)rgs:      print the contents of the operand stack\n  (l)ocals:    print the contents of the locals\n  (v)ars:      print the contents of the cellvars\n  (s)tep:      execute one instruction\n  (o)ut:       Step out of the current function call\n  (r)un:       continue execution\n  (q)uit:      quit execution");
             } else if (cmd.equals("run") || cmd.equals("r")) {
                 exited = true;
                 JCoCo.stepOverInstructions = false;
+            } else if (cmd.equals("quit") || cmd.equals("q")) {
+                System.exit(0);
             } else if (cmd.equals("step") || cmd.equals("s")) {
                 printDebuggerPrompt = false; // Don't keep printing it if we are stepping.
                 exited = true;
@@ -184,7 +210,12 @@ class PyFrame extends PyObjectAdapter {
             } else if (cmd.equals("callstack") || cmd.equals("c")) {
                 JCoCo.printCallStack(new ArrayList<PyFrame>(JCoCo.callStack));
             } else if (cmd.equals("args") || cmd.equals("a")) {
-                System.out.println(opStack.toString());
+                if (JCoCo.verbose) {
+                    System.out.println(opStack.toStringNoMarkers());
+                } else {
+                    System.out.println(opStack.toString());
+                }
+
             } else if (cmd.equals("type") || cmd.equals("t")) {
                 System.out.println("\n***********************************\nPC=" + PC + "\n***********************************");
                 System.out.println(this.code.prettyString("", true));
