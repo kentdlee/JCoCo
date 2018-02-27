@@ -171,9 +171,8 @@ class PyFrame extends PyObjectAdapter {
         while (JCoCo.callStack.size() > callStackSize) {
             JCoCo.callStack.pop(); // restore call stack after debugging.
         }
-        
+
         JCoCo.stepOverInstructions = debugging;
-        
 
         return s;
     }
@@ -508,6 +507,10 @@ class PyFrame extends PyObjectAdapter {
                         }
                         u = safetyPop();
                         JCoCo.popFrame();
+
+                        if (JCoCo.stepOverInstructions) {
+                            System.out.println("Interactive Debugger returning from function " + this.code.getName() + " ...");
+                        }
 
                         return u;
                     case LOAD_ATTR:

@@ -1,0 +1,96 @@
+Class: Dog
+BEGIN
+    Function: setName/2
+    Constants: None
+    Locals: self, name
+    Globals: name
+    BEGIN
+              LOAD_FAST                      1
+              LOAD_FAST                      0
+              STORE_ATTR                     0
+              LOAD_CONST                     0
+              RETURN_VALUE             
+    END
+    Function: __str__/1
+    Constants: None, "Dog(", ",", ")"
+    Locals: self
+    Globals: name, bark
+    BEGIN
+              LOAD_CONST                     1
+              LOAD_FAST                      0
+              LOAD_ATTR                      0
+              BINARY_ADD               
+              LOAD_CONST                     2
+              BINARY_ADD               
+              LOAD_FAST                      0
+              LOAD_ATTR                      1
+              BINARY_ADD               
+              LOAD_CONST                     3
+              BINARY_ADD               
+              RETURN_VALUE             
+    END
+    Function: getName/1
+    Constants: None
+    Locals: self
+    Globals: name
+    BEGIN
+              LOAD_FAST                      0
+              LOAD_ATTR                      0
+              RETURN_VALUE             
+    END
+    Function: __init__/3
+    Constants: None
+    Locals: self, name, bark
+    Globals: name, bark
+    BEGIN
+              LOAD_FAST                      1
+              LOAD_FAST                      0
+              STORE_ATTR                     0
+              LOAD_FAST                      2
+              LOAD_FAST                      0
+              STORE_ATTR                     1
+              LOAD_CONST                     0
+              RETURN_VALUE             
+    END
+    Function: speak/1
+    Constants: None
+    Locals: self
+    Globals: print, bark
+    BEGIN
+              LOAD_GLOBAL                    0
+              LOAD_FAST                      0
+              LOAD_ATTR                      1
+              CALL_FUNCTION                  1
+              POP_TOP                  
+              LOAD_CONST                     0
+              RETURN_VALUE             
+    END
+END
+Function: main/0
+Constants: None, "Mesa", "woof", "Sequoia"
+Locals: d
+Globals: Dog, print, getName, speak, setName
+BEGIN
+          LOAD_GLOBAL                    0
+          LOAD_CONST                     1
+          LOAD_CONST                     2
+          CALL_FUNCTION                  2
+          STORE_FAST                     0
+          LOAD_GLOBAL                    1
+          LOAD_FAST                      0
+          LOAD_ATTR                      2
+          CALL_FUNCTION                  0
+          CALL_FUNCTION                  1
+          POP_TOP                  
+          LOAD_FAST                      0
+          LOAD_ATTR                      3
+          CALL_FUNCTION                  0
+          POP_TOP                  
+          LOAD_FAST                      0
+          LOAD_ATTR                      4
+          LOAD_CONST                     3
+          CALL_FUNCTION                  1
+          POP_TOP                  
+          LOAD_CONST                     0
+          RETURN_VALUE             
+END
