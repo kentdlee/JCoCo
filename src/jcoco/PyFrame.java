@@ -506,8 +506,7 @@ class PyFrame extends PyObjectAdapter {
                         
                         if (JCoCo.stepOverInstructions) {
                             System.out.println("Interactive Debugger returning from function " + this.code.getName() + " ...");
-                        }
-                        
+                        }   
 
                         return u;
                     case LOAD_ATTR:
