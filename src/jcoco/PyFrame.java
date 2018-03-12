@@ -322,6 +322,13 @@ class PyFrame extends PyObjectAdapter {
                     case COMPARE_OP:
                         v = this.safetyPop();
                         u = this.safetyPop();
+                        if (operand >= 6 && operand < 10) {
+                            //for these comparisons the method should be called on the 
+                            //second argument (TOS), not the first (TOS1)
+                            PyObject tmp = u;
+                            u = v;
+                            v = tmp;
+                        }
                         args = new ArrayList<PyObject>();
                         args.add(v);
 
