@@ -101,7 +101,7 @@ class PyFrame extends PyObjectAdapter {
 
         PyObject obj = opStack.pop();
 
-        // If we were to come across a PyMarker it was left on the stack by 
+        // If we were to come across a PyMarker it was left on the stack by
         // code that had an exception. This should not happen, but if so, throw it away.
         while (obj.getType().typeId() == PyType.PyTypeId.PyMarkerType) {
             obj = opStack.pop();
@@ -150,9 +150,10 @@ class PyFrame extends PyObjectAdapter {
 
         for (String key : map.keySet()) {
             try {
-                t = (PyStr) map.get(key).callMethod(new PyCallStack(), "__repr__", new ArrayList<PyObject>());
+                t = (PyStr) map.get(key).callMethod("__repr__", new ArrayList<PyObject>());
                 t_str = t.str();
             } catch (PyException ex) {
+                JCoCo.callStack.pop(); // get rid of bad stack frame put there by debugger.
                 try {
                     t_str = ((PyObject) map.get(key)).str();
                 } catch (PyException ex2) {
@@ -319,7 +320,7 @@ class PyFrame extends PyObjectAdapter {
                         v = this.safetyPop();
                         u = this.safetyPop();
                         if (operand >= 6 && operand < 10) {
-                            //for these comparisons the method should be called on the 
+                            //for these comparisons the method should be called on the
                             //second argument (TOS), not the first (TOS1)
                             PyObject tmp = u;
                             u = v;
@@ -336,8 +337,8 @@ class PyFrame extends PyObjectAdapter {
                         //do not need to delete args, garbage collection will handle it
                         this.opStack.push(w);
 
-                        //The following must be done for exceptions because the 
-                        //END_FINALLY needs to know whether the exception was handled 
+                        //The following must be done for exceptions because the
+                        //END_FINALLY needs to know whether the exception was handled
                         //or not.
                         if (operand == 10) {
                             handled = ((PyBool) w).getVal();
@@ -488,8 +489,8 @@ class PyFrame extends PyObjectAdapter {
                         break;
                     case CALL_FUNCTION:
                         args = new ArrayList<PyObject>();
-                        //NOTE: Arguments are added backwards because they are popped 
-                        //off the stack in reverse order. So, the called function 
+                        //NOTE: Arguments are added backwards because they are popped
+                        //off the stack in reverse order. So, the called function
                         //gets the arguments backwards
                         for (i = 0; i < operand; i++) {
                             u = this.safetyPop();
@@ -510,6 +511,10 @@ class PyFrame extends PyObjectAdapter {
                         }
                         u = safetyPop();
                         callStack.popFrame();
+
+                        if (JCoCo.stepOverInstructions) {
+                            System.out.println("Interactive Debugger returning from function " + this.code.getName() + " ...");
+                        }
 
                         if (JCoCo.stepOverInstructions) {
                             System.out.println("Interactive Debugger returning from function " + this.code.getName() + " ...");
@@ -644,25 +649,25 @@ class PyFrame extends PyObjectAdapter {
                         this.opStack.push(cell.deref());
                         break;
                     case SETUP_EXCEPT:
-                        //multiplying by -1 is because any value less than 0 is 
+                        //multiplying by -1 is because any value less than 0 is
                         // for a try except
                         this.blockStack.push(-1 * operand);
 
                         // We put a marker on the operand stack in case an exception occurs. If
-                        // a marker is popped (by safetyPop) it is thrown away so that the machine 
+                        // a marker is popped (by safetyPop) it is thrown away so that the machine
                         // does not see the marker. If an exception occurs we'll look for the marker.
                         opStack.push(new PyMarker());
                         break;
                     case RAISE_VARARGS:
-                        // This is not currently implemented according to the 
+                        // This is not currently implemented according to the
                         // byte code documentation. The documentation says this:
                         // RAISE_VARARGS(argc)
-                        //    Raises an exception. argc indicates the number of 
-                        //    parameters to the raise statement, ranging from 0 to 3. 
-                        //    The handler will find the traceback as TOS2, the 
+                        //    Raises an exception. argc indicates the number of
+                        //    parameters to the raise statement, ranging from 0 to 3.
+                        //    The handler will find the traceback as TOS2, the
                         //    parameter as TOS1, and the exception as TOS.
                         // In this interpreter, currently exceptions contain the traceback
-                        // and there is always one argument to the RAISE_VARARGS 
+                        // and there is always one argument to the RAISE_VARARGS
                         // instruction, which is the value stored in the exception
                         u = this.safetyPop();
                         throw ((PyException) u);
@@ -676,8 +681,8 @@ class PyFrame extends PyObjectAdapter {
                     case SETUP_FINALLY:
                         this.blockStack.push(-1 * operand);
                         // We put a marker on the operand stack in case an exception occurs. If
-                        // a marker is popped (by safetyPop) it is thrown away so that the machine 
-                        // does not see the marker. When we get to the END_FINALLY we'll clean up 
+                        // a marker is popped (by safetyPop) it is thrown away so that the machine
+                        // does not see the marker. When we get to the END_FINALLY we'll clean up
                         // the operand stack of anything left.
                         opStack.push(new PyMarker());
                         break;
@@ -697,8 +702,8 @@ class PyFrame extends PyObjectAdapter {
                             throw ((PyException) u);
                         }
                         // when the SETUP_FINALLY was executed, a marker was added to the operand stack
-                        // in case an exception occurrred. Now that we are done processing the finally, 
-                        // we clean up the operand stack to this point. 
+                        // in case an exception occurrred. Now that we are done processing the finally,
+                        // we clean up the operand stack to this point.
                         if (!opStack.isEmpty()) {
                             PyObject obj = opStack.pop();
                             while (!obj.str().equals("Marker") && !opStack.isEmpty()) {
@@ -744,8 +749,8 @@ class PyFrame extends PyObjectAdapter {
                         }
 
                         // when the SETUP_EXCEPT was executed, a marker was added to the operand stack
-                        // in case an exception occurrred. Now that we are processing the exception, 
-                        // we clean up the operand stack to this point. 
+                        // in case an exception occurrred. Now that we are processing the exception,
+                        // we clean up the operand stack to this point.
                         if (!opStack.isEmpty()) {
                             PyObject obj = opStack.pop();
                             while (!obj.str().equals("Marker") && !opStack.isEmpty()) {

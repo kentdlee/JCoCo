@@ -86,43 +86,50 @@ public class PyStack<T> {
         return out.toString();
     }
 
-    // This is used only by debugging to leave out marker objects when looking at the 
+    // This is used only by debugging to leave out marker objects when looking at the
     // operand stack. This is specific to JCoCo.
     public String toStringNoMarkers() {
-        // temporarily turn off stepping if it is on.
-        boolean debugging = JCoCo.stepOverInstructions;
-        JCoCo.stepOverInstructions = false;
+       // temporarily turn off stepping if it is on.
+       boolean debugging = JCoCo.stepOverInstructions;
+       JCoCo.stepOverInstructions = false;
 
-        StringBuffer out = new StringBuffer();
+       int callStackSize = JCoCo.callStack.size();
 
-        out.append("top\n---\n");
+       StringBuffer out = new StringBuffer();
 
-        __PyStackElement<T> cursor;
+       out.append("top\n---\n");
 
-        cursor = this.tos;
+       __PyStackElement<T> cursor;
 
-        while (cursor != null) {
-            if (!cursor.object.toString().equals("Marker")) {
-                try {
-                    out.append(cursor.object + "\n");
-                } catch (PyException ex) {
-                    try {
-                        out.append(((PyObject) cursor.object).str() + "\n");
-                    } catch (PyException ex2) {
-                        out.append("<" + ((PyObject) cursor.object).getType() + " object at 0x" + Integer.toHexString(System.identityHashCode(this)) + ">\n");
-                    }
-                }
-            }
-            cursor = cursor.next;
-        }
+       cursor = this.tos;
 
-        out.append("---\n");
+       while (cursor != null) {
+           if (!cursor.object.toString().equals("Marker")) {
+               try {
+                   out.append(cursor.object + "\n");
+               } catch (PyException ex) {
+                   try {
+                       out.append(((PyObject) cursor.object).str() + "\n");
+                   } catch (PyException ex2) {
+                       out.append("<" + ((PyObject) cursor.object).getType() + " object at 0x" + Integer.toHexString(System.identityHashCode(this)) + ">\n");
+                   }
+               }
+           }
+           cursor = cursor.next;
+       }
 
-        // restore step over debugging if active.
-        JCoCo.stepOverInstructions = debugging;
+       out.append("---\n");
 
-        return out.toString();
-    }
+       // restore step over debugging if active.
+       JCoCo.stepOverInstructions = debugging;
+
+       while (JCoCo.callStack.size() > callStackSize) {
+           JCoCo.callStack.pop(); // restore call stack after debugging.
+       }
+
+       return out.toString();
+   }
+
 
     public int getCount() {
         return this.count;
