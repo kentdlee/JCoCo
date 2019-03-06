@@ -39,8 +39,8 @@ public class PyAttr extends PyCallableAdapter {
     }
     
     @Override 
-    public PyObject __call__(ArrayList<PyObject> args) {
+    public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
         args.add(0, self);
-        return self.callMethod(field, args);
+        return self.callMethod(callStack,field, args);
     }
 }

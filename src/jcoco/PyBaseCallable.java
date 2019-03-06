@@ -35,7 +35,7 @@ public class PyBaseCallable implements PyCallable {
         PyBaseCallable self = this;
         this.dict.put("__str__", new PyBaseCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 0) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 0 argument, got " + args.size());
@@ -47,7 +47,7 @@ public class PyBaseCallable implements PyCallable {
 
         this.dict.put("__hash__", new PyBaseCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 throw new PyException(PyException.ExceptionType.PYILLEGALOPERATIONEXCEPTION,
                         "TypeError: unhashable type: '" + self.getType().str() + "'");
             }
@@ -57,19 +57,19 @@ public class PyBaseCallable implements PyCallable {
 
         this.dict.put("__repr__", new PyBaseCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 0) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 0 argument, got " + args.size());
                 }
 
-                return self.callMethod("__str__", args);
+                return self.callMethod(callStack,"__str__", args);
             }
         });
 
         this.dict.put("__type__", new PyBaseCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 0) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 0 argument, got " + args.size());
@@ -79,14 +79,24 @@ public class PyBaseCallable implements PyCallable {
             }
 
             @Override
-            public PyObject callMethod(String s, ArrayList<PyObject> args) {
+            public PyObject callMethod(PyCallStack callStack, String s, ArrayList<PyObject> args) {
                 throw new PyException(ExceptionType.PYILLEGALOPERATIONEXCEPTION, "Cannot call __call__ on PyBaseCallable object"); 
             }
         });
     }
 
     @Override
-    public PyObject __call__(ArrayList<PyObject> args) {
+    public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
+        throw new PyException(ExceptionType.PYILLEGALOPERATIONEXCEPTION, "Cannot call PyBaseCallableAdapter");
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        throw new PyException(ExceptionType.PYILLEGALOPERATIONEXCEPTION, "Cannot call PyBaseCallableAdapter");
+    }
+    
+    @Override
+    public int hashCode() {
         throw new PyException(ExceptionType.PYILLEGALOPERATIONEXCEPTION, "Cannot call PyBaseCallableAdapter");
     }
 
@@ -96,14 +106,14 @@ public class PyBaseCallable implements PyCallable {
     }
 
     @Override
-    public PyObject callMethod(String name, ArrayList<PyObject> args) {
+    public PyObject callMethod(PyCallStack callStack, String name, ArrayList<PyObject> args) {
         if (!this.dict.containsKey(name)) {
             throw new PyException(PyException.ExceptionType.PYILLEGALOPERATIONEXCEPTION, "TypeError: '" + this.getType().str() + "' object has no attribute '" + name + "'");
         }
 
         PyCallable mbr = (PyCallable) this.dict.get(name);
 
-        return mbr.__call__(args);
+        return mbr.__call__(callStack, args);
     }
 
     @Override

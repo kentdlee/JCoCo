@@ -48,7 +48,7 @@ public class PyStr extends PyPrimitiveTypeAdapter {
 
         funs.put("__add__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION, "TypeError: expected 2 arguments, got " + args.size());
                 }
@@ -68,7 +68,7 @@ public class PyStr extends PyPrimitiveTypeAdapter {
 
         funs.put("__hash__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 1) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION, "TypeError: expected 1 arguments, got " + args.size());
                 }
@@ -81,7 +81,7 @@ public class PyStr extends PyPrimitiveTypeAdapter {
 
         funs.put("__float__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 1) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION, "TypeError: expected 1 arguments, got " + args.size());
                 }
@@ -99,7 +99,7 @@ public class PyStr extends PyPrimitiveTypeAdapter {
 
         funs.put("__int__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 1) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION, "TypeError: expected 1 arguments, got " + args.size());
                 }
@@ -117,7 +117,7 @@ public class PyStr extends PyPrimitiveTypeAdapter {
 
         funs.put("__bool__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 1) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION, "TypeError: expected 1 arguments, got " + args.size());
                 }
@@ -139,7 +139,7 @@ public class PyStr extends PyPrimitiveTypeAdapter {
 
         funs.put("__funlist__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 1) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION, "TypeError: expected 1 arguments, got " + args.size());
                 }
@@ -164,7 +164,7 @@ public class PyStr extends PyPrimitiveTypeAdapter {
 
         funs.put("__list__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 1) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION, "TypeError: expected 1 arguments, got " + args.size());
                 }
@@ -188,7 +188,7 @@ public class PyStr extends PyPrimitiveTypeAdapter {
 
         funs.put("__str__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 1) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION, "TypeError: expected 1 arguments, got " + args.size());
                 }
@@ -201,7 +201,7 @@ public class PyStr extends PyPrimitiveTypeAdapter {
 
         funs.put("__repr__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 1) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION, "TypeError: expected 1 arguments, got " + args.size());
                 }
@@ -218,7 +218,7 @@ public class PyStr extends PyPrimitiveTypeAdapter {
 
         funs.put("split", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() > 2) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION, "TypeError: expected 1 or 2 arguments, got " + args.size());
                 }
@@ -254,7 +254,7 @@ public class PyStr extends PyPrimitiveTypeAdapter {
 
         funs.put("strip", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() > 2) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION, "TypeError: expected 1 or 2 arguments, got " + args.size());
                 }
@@ -287,7 +287,7 @@ public class PyStr extends PyPrimitiveTypeAdapter {
 
         funs.put("__getitem__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION, "TypeError: expected 2 arguments, got " + args.size());
                 }
@@ -307,7 +307,7 @@ public class PyStr extends PyPrimitiveTypeAdapter {
 
         funs.put("__len__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 1) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION, "TypeError: expected 1 arguments, got " + args.size());
                 }
@@ -321,7 +321,7 @@ public class PyStr extends PyPrimitiveTypeAdapter {
 
         funs.put("__iter__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 1) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION, "TypeError: expected 1 arguments, got " + args.size());
                 }
@@ -335,7 +335,7 @@ public class PyStr extends PyPrimitiveTypeAdapter {
 
         funs.put("__eq__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION, "TypeError: expected 2 arguments, got " + args.size());
                 }
@@ -360,7 +360,7 @@ public class PyStr extends PyPrimitiveTypeAdapter {
 
         funs.put("__ne__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION, "TypeError: expected 2 arguments, got " + args.size());
                 }
@@ -385,7 +385,7 @@ public class PyStr extends PyPrimitiveTypeAdapter {
 
         funs.put("__lt__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION, "TypeError: expected 2 arguments, got " + args.size());
                 }
@@ -410,7 +410,7 @@ public class PyStr extends PyPrimitiveTypeAdapter {
 
         funs.put("__gt__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION, "TypeError: expected 2 arguments, got " + args.size());
                 }
@@ -435,7 +435,7 @@ public class PyStr extends PyPrimitiveTypeAdapter {
 
         funs.put("__le__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION, "TypeError: expected 2 arguments, got " + args.size());
                 }
@@ -460,7 +460,7 @@ public class PyStr extends PyPrimitiveTypeAdapter {
 
         funs.put("__ge__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION, "TypeError: expected 2 arguments, got " + args.size());
                 }

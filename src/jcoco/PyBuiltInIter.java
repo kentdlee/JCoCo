@@ -41,7 +41,7 @@ public class PyBuiltInIter extends PyCallableAdapter {
     }
     
     @Override
-    public PyObject __call__(ArrayList<PyObject> args)  {
+    public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args)  {
         ArrayList<PyObject> iterArgs = new ArrayList<PyObject>();
         PyObject x;
         
@@ -52,7 +52,7 @@ public class PyBuiltInIter extends PyCallableAdapter {
         
         x =args.get(0);
         
-        return x.callMethod("__iter__", iterArgs);
+        return x.callMethod(callStack,"__iter__", iterArgs);
     }
 }
 

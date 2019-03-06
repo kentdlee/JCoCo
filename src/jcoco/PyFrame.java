@@ -53,10 +53,12 @@ class PyFrame extends PyObjectAdapter {
     private final String[] cmp_op = {"__lt__", "__le__", "__eq__", "__ne__", "__gt__", "__ge__",
         "__contains__", "__notin__", "is__", "is_not", "__excmatch",
         "BAD"};
+    private PyCallStack callStack;
 
-    public PyFrame(PyCode code, ArrayList<PyObject> args, HashMap<String, PyObject> globals,
+    public PyFrame(PyCallStack callStack, PyCode code, ArrayList<PyObject> args, HashMap<String, PyObject> globals,
             ArrayList<PyObject> consts, HashMap<String, PyCell> cellvars) {
         super();
+        this.callStack = callStack;
         this.globals = globals;
         this.code = code;
         this.consts = consts;
@@ -99,7 +101,7 @@ class PyFrame extends PyObjectAdapter {
 
         PyObject obj = opStack.pop();
 
-        // If we were to come across a PyMarker it was left on the stack by 
+        // If we were to come across a PyMarker it was left on the stack by
         // code that had an exception. This should not happen, but if so, throw it away.
         while (obj.getType().typeId() == PyType.PyTypeId.PyMarkerType) {
             obj = opStack.pop();
@@ -135,11 +137,10 @@ class PyFrame extends PyObjectAdapter {
         return this.PC;
     }
 
-    public String hashMapToString(HashMap theMap) {
+  public String hashMapToString(HashMap theMap) {
         // temporarily turn off stepping if it is on.
         boolean debugging = JCoCo.stepOverInstructions;
         JCoCo.stepOverInstructions = false;
-        int callStackSize = JCoCo.callStack.size();
 
         String s = "{";
 
@@ -149,10 +150,9 @@ class PyFrame extends PyObjectAdapter {
 
         for (String key : map.keySet()) {
             try {
-                t = (PyStr) map.get(key).callMethod("__repr__", new ArrayList<PyObject>());
+                t = (PyStr) map.get(key).callMethod(new PyCallStack(), "__repr__", new ArrayList<PyObject>());
                 t_str = t.str();
             } catch (PyException ex) {
-                JCoCo.callStack.pop(); // get rid of bad stack frame put there by debugger.
                 try {
                     t_str = ((PyObject) map.get(key)).str();
                 } catch (PyException ex2) {
@@ -167,10 +167,6 @@ class PyFrame extends PyObjectAdapter {
         }
 
         s += "}";
-
-        while (JCoCo.callStack.size() > callStackSize) {
-            JCoCo.callStack.pop(); // restore call stack after debugging.
-        }
 
         JCoCo.stepOverInstructions = debugging;
 
@@ -207,7 +203,7 @@ class PyFrame extends PyObjectAdapter {
                 JCoCo.stepOverInstructions = false;
                 exited = true;
             } else if (cmd.equals("callstack") || cmd.equals("c")) {
-                JCoCo.printCallStack(new ArrayList<PyFrame>(JCoCo.callStack));
+                callStack.printCallStack();
             } else if (cmd.equals("args") || cmd.equals("a")) {
                 if (JCoCo.verbose) {
                     System.out.println(opStack.toStringNoMarkers());
@@ -252,7 +248,7 @@ class PyFrame extends PyObjectAdapter {
         Iterator it;
         String name;
 
-        JCoCo.pushFrame(this);
+        callStack.pushFrame(this);
 
         while (true) {
             try {
@@ -323,7 +319,7 @@ class PyFrame extends PyObjectAdapter {
                         v = this.safetyPop();
                         u = this.safetyPop();
                         if (operand >= 6 && operand < 10) {
-                            //for these comparisons the method should be called on the 
+                            //for these comparisons the method should be called on the
                             //second argument (TOS), not the first (TOS1)
                             PyObject tmp = u;
                             u = v;
@@ -336,12 +332,12 @@ class PyFrame extends PyObjectAdapter {
                         //arrat and it should be intialized to all comparison
                         //operators. This list will need to expand at some point.
                         //the cmp_op array is at the top of this module.
-                        w = u.callMethod(cmp_op[operand], args);
+                        w = u.callMethod(callStack, cmp_op[operand], args);
                         //do not need to delete args, garbage collection will handle it
                         this.opStack.push(w);
 
-                        //The following must be done for exceptions because the 
-                        //END_FINALLY needs to know whether the exception was handled 
+                        //The following must be done for exceptions because the
+                        //END_FINALLY needs to know whether the exception was handled
                         //or not.
                         if (operand == 10) {
                             handled = ((PyBool) w).getVal();
@@ -411,7 +407,7 @@ class PyFrame extends PyObjectAdapter {
                         args = new ArrayList<PyObject>();
                         args.add(v);
 
-                        w = u.callMethod("__add__", args);
+                        w = u.callMethod(callStack, "__add__", args);
 
                         this.opStack.push(w);
                         break;
@@ -420,7 +416,7 @@ class PyFrame extends PyObjectAdapter {
                         u = this.safetyPop();
                         args = new ArrayList<PyObject>();
                         args.add(v);
-                        w = u.callMethod("__sub__", args);
+                        w = u.callMethod(callStack, "__sub__", args);
                         this.opStack.push(w);
                         break;
                     case BINARY_MULTIPLY:
@@ -428,7 +424,7 @@ class PyFrame extends PyObjectAdapter {
                         u = this.safetyPop();
                         args = new ArrayList<PyObject>();
                         args.add(v);
-                        w = u.callMethod("__mul__", args);
+                        w = u.callMethod(callStack, "__mul__", args);
                         this.opStack.push(w);
                         break;
                     case BINARY_FLOOR_DIVIDE:
@@ -436,7 +432,7 @@ class PyFrame extends PyObjectAdapter {
                         u = this.safetyPop();
                         args = new ArrayList<PyObject>();
                         args.add(v);
-                        w = u.callMethod("__floordiv__", args);
+                        w = u.callMethod(callStack, "__floordiv__", args);
                         this.opStack.push(w);
                         break;
                     case BINARY_TRUE_DIVIDE:
@@ -444,7 +440,7 @@ class PyFrame extends PyObjectAdapter {
                         u = this.safetyPop();
                         args = new ArrayList<PyObject>();
                         args.add(v);
-                        w = u.callMethod("__truediv__", args);
+                        w = u.callMethod(callStack, "__truediv__", args);
                         this.opStack.push(w);
                         break;
                     case BINARY_MODULO:
@@ -452,7 +448,7 @@ class PyFrame extends PyObjectAdapter {
                         u = this.safetyPop();
                         args = new ArrayList<PyObject>();
                         args.add(v);
-                        w = u.callMethod("__mod__", args);
+                        w = u.callMethod(callStack, "__mod__", args);
                         this.opStack.push(w);
                         break;
                     case BINARY_POWER:
@@ -460,13 +456,13 @@ class PyFrame extends PyObjectAdapter {
                         u = this.safetyPop();
                         args = new ArrayList<PyObject>();
                         args.add(v);
-                        w = u.callMethod("__pow__", args);
+                        w = u.callMethod(callStack, "__pow__", args);
                         this.opStack.push(w);
                         break;
                     case GET_ITER:
                         u = this.safetyPop();
                         args = new ArrayList<PyObject>();
-                        v = u.callMethod("__iter__", args);
+                        v = u.callMethod(callStack, "__iter__", args);
                         this.opStack.push(v);
                         break;
                     case ROT_TWO:
@@ -479,7 +475,7 @@ class PyFrame extends PyObjectAdapter {
                         u = this.safetyPop();
                         args = new ArrayList<PyObject>();
                         try {
-                            v = u.callMethod("__next__", args);
+                            v = u.callMethod(callStack, "__next__", args);
                             this.opStack.push(u);
                             this.opStack.push(v);
                         } catch (PyException ex) {
@@ -492,15 +488,15 @@ class PyFrame extends PyObjectAdapter {
                         break;
                     case CALL_FUNCTION:
                         args = new ArrayList<PyObject>();
-                        //NOTE: Arguments are added backwards because they are popped 
-                        //off the stack in reverse order. So, the called function 
+                        //NOTE: Arguments are added backwards because they are popped
+                        //off the stack in reverse order. So, the called function
                         //gets the arguments backwards
                         for (i = 0; i < operand; i++) {
                             u = this.safetyPop();
                             args.add(u);
                         }
                         u = this.safetyPop();
-                        v = u.callMethod("__call__", args);
+                        v = u.callMethod(callStack, "__call__", args);
                         this.opStack.push(v);
                         //don't need to delete args; garbage collection will handle it
                         break;
@@ -513,7 +509,11 @@ class PyFrame extends PyObjectAdapter {
                             JCoCo.stepOverInstructions = true;
                         }
                         u = safetyPop();
-                        JCoCo.popFrame();
+                        callStack.popFrame();
+
+                        if (JCoCo.stepOverInstructions) {
+                            System.out.println("Interactive Debugger returning from function " + this.code.getName() + " ...");
+                        }
 
                         if (JCoCo.stepOverInstructions) {
                             System.out.println("Interactive Debugger returning from function " + this.code.getName() + " ...");
@@ -537,7 +537,7 @@ class PyFrame extends PyObjectAdapter {
                         args = new ArrayList<PyObject>();
                         args.add(u);
 
-                        w = v.callMethod("__getitem__", args);
+                        w = v.callMethod(callStack, "__getitem__", args);
                         this.opStack.push(w);
                         break;
                     case STORE_SUBSCR:
@@ -548,7 +548,7 @@ class PyFrame extends PyObjectAdapter {
                         args.add(w);
                         args.add(u);
 
-                        w = v.callMethod("__setitem__", args);
+                        w = v.callMethod(callStack, "__setitem__", args);
                         break;
                     case LOAD_CLOSURE:
                         //the free or cell vars in the code object give us the name of the value
@@ -648,25 +648,25 @@ class PyFrame extends PyObjectAdapter {
                         this.opStack.push(cell.deref());
                         break;
                     case SETUP_EXCEPT:
-                        //multiplying by -1 is because any value less than 0 is 
+                        //multiplying by -1 is because any value less than 0 is
                         // for a try except
                         this.blockStack.push(-1 * operand);
 
                         // We put a marker on the operand stack in case an exception occurs. If
-                        // a marker is popped (by safetyPop) it is thrown away so that the machine 
+                        // a marker is popped (by safetyPop) it is thrown away so that the machine
                         // does not see the marker. If an exception occurs we'll look for the marker.
                         opStack.push(new PyMarker());
                         break;
                     case RAISE_VARARGS:
-                        // This is not currently implemented according to the 
+                        // This is not currently implemented according to the
                         // byte code documentation. The documentation says this:
                         // RAISE_VARARGS(argc)
-                        //    Raises an exception. argc indicates the number of 
-                        //    parameters to the raise statement, ranging from 0 to 3. 
-                        //    The handler will find the traceback as TOS2, the 
+                        //    Raises an exception. argc indicates the number of
+                        //    parameters to the raise statement, ranging from 0 to 3.
+                        //    The handler will find the traceback as TOS2, the
                         //    parameter as TOS1, and the exception as TOS.
                         // In this interpreter, currently exceptions contain the traceback
-                        // and there is always one argument to the RAISE_VARARGS 
+                        // and there is always one argument to the RAISE_VARARGS
                         // instruction, which is the value stored in the exception
                         u = this.safetyPop();
                         throw ((PyException) u);
@@ -680,8 +680,8 @@ class PyFrame extends PyObjectAdapter {
                     case SETUP_FINALLY:
                         this.blockStack.push(-1 * operand);
                         // We put a marker on the operand stack in case an exception occurs. If
-                        // a marker is popped (by safetyPop) it is thrown away so that the machine 
-                        // does not see the marker. When we get to the END_FINALLY we'll clean up 
+                        // a marker is popped (by safetyPop) it is thrown away so that the machine
+                        // does not see the marker. When we get to the END_FINALLY we'll clean up
                         // the operand stack of anything left.
                         opStack.push(new PyMarker());
                         break;
@@ -701,8 +701,8 @@ class PyFrame extends PyObjectAdapter {
                             throw ((PyException) u);
                         }
                         // when the SETUP_FINALLY was executed, a marker was added to the operand stack
-                        // in case an exception occurrred. Now that we are done processing the finally, 
-                        // we clean up the operand stack to this point. 
+                        // in case an exception occurrred. Now that we are done processing the finally,
+                        // we clean up the operand stack to this point.
                         if (!opStack.isEmpty()) {
                             PyObject obj = opStack.pop();
                             while (!obj.str().equals("Marker") && !opStack.isEmpty()) {
@@ -748,8 +748,8 @@ class PyFrame extends PyObjectAdapter {
                         }
 
                         // when the SETUP_EXCEPT was executed, a marker was added to the operand stack
-                        // in case an exception occurrred. Now that we are processing the exception, 
-                        // we clean up the operand stack to this point. 
+                        // in case an exception occurrred. Now that we are processing the exception,
+                        // we clean up the operand stack to this point.
                         if (!opStack.isEmpty()) {
                             PyObject obj = opStack.pop();
                             while (!obj.str().equals("Marker") && !opStack.isEmpty()) {

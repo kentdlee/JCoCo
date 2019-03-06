@@ -39,20 +39,20 @@ public class PyFunction extends PyCallableAdapter {
         PyFunction self = this;
         this.dict.put("__call__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args)  {
-                return self.__call__(args);
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args)  {
+                return self.__call__(callStack, args);
             }
         });
     }
 
     @Override
-    public PyObject __call__(ArrayList<PyObject> args)  {
+    public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args)  {
         if (args.size() != this.code.getArgCount()) {
             throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION, 
                                     "Type Error: expected "+this.code.getArgCount() + " arguments, got "+args.size());
         }
         
-        PyFrame frame = new PyFrame(this.code, args, this.globals, this.code.getConsts(), this.cellvars);
+        PyFrame frame = new PyFrame(callStack, this.code, args, this.globals, this.code.getConsts(), this.cellvars);
         
         PyObject result = frame.execute();
         

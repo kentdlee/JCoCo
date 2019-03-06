@@ -29,7 +29,7 @@ public class PyFunListElm {
         }
     }
 
-    public String str()  {
+    public String str() {
         String s = head.str();
 
         if (tail != null) {
@@ -39,10 +39,15 @@ public class PyFunListElm {
         return s;
     }
 
-    public String repr()  {
+    public String repr() {
         ArrayList<PyObject> args = new ArrayList<PyObject>();
 
-        String s = head.callMethod("__repr__", args).str();
+        // Creating a new call stack here is a trade-off. This simplifies
+        // the interface to the str() method, for instance. It only affects
+        // usage of the debugger. Exceptions will still have the full traceback
+        // but if the debugger is used, the call stack will stop at this call
+        // for calls to "__repr__" in this case.
+        String s = head.callMethod(new PyCallStack(), "__repr__", args).str();
 
         if (tail != null) {
             s += ", " + tail.str();

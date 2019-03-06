@@ -127,10 +127,10 @@ public class PyClass extends PyType {
     }
     
     @Override
-    public PyObject __call__(ArrayList<PyObject> args)  {       
+    public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args)  {       
         PyObjectAdapter obj = new PyObjectInst(this);
         initInstance(obj);
-        ((PyMethod) obj.dict.get("__init__")).__call__(args);
+        ((PyMethod) obj.dict.get("__init__")).__call__(callStack, args);
         
         return obj;
     }

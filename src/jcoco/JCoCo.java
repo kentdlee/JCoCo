@@ -40,40 +40,13 @@ import jcoco.PyType.PyTypeId;
 
 public class JCoCo {
 
-    public static Stack<PyFrame> callStack = new Stack<PyFrame>();
     public static HashMap<PyTypeId, PyType> PyTypes = new HashMap<PyTypeId, PyType>();
     public static boolean verbose = false;
     public static Scanner scanner;
     public static boolean stepOverInstructions = false;
 
-    public static Stack<PyFrame> getCallStack() {
-        return callStack;
-    }
-
-    public static void pushFrame(PyFrame frame) {
-        callStack.push(frame);
-        if (callStack.size() >= 1000) {
-            throw new PyException(ExceptionType.PYILLEGALOPERATIONEXCEPTION, "Call Stack Overflow.");
-        }
-    }
-
-    public static void popFrame() throws EmptyStackException {
-        callStack.pop();
-    }
-
-    public static void printCallStack(ArrayList<PyFrame> callStack) {
-        for (int k = 0; k < callStack.size(); k++) {
-            System.err.println("=========> PC=" + (callStack.get(k).getPC()) + " in this function. ");
-            if (callStack.get(k).getCode().getType().typeId() == PyTypeId.PyCodeType) {
-                try {
-                    System.err.println(callStack.get(k).getCode().prettyString("", true));
-                } catch (PyException e) {
-                    System.err.println("Unable to print traceback : " + e.getMessage());
-                }
-            }
-        }
-    }
-
+    public static PyCallStack mainThreadCallStack = new PyCallStack();
+    
     public static void initTypes() {
 
         PyType typeType = new PyType("type", PyTypeId.PyTypeType);
@@ -282,7 +255,7 @@ public class JCoCo {
             }
 
             ArrayList<PyObject> arguments = new ArrayList<PyObject>();
-            PyObject result = globals.get("main").callMethod("__call__", arguments);
+            PyObject result = globals.get("main").callMethod(mainThreadCallStack,"__call__", arguments);
         } catch (PyException ex) {
             System.err.print("\n\n");
             System.err.println("*********************************************************");

@@ -24,14 +24,14 @@ public class PyCallableAdapter extends PyObjectAdapter implements PyCallable {
         PyCallableAdapter self = this;
         this.dict.put("__call__", new PyBaseCallable() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args)  {
-                return self.__call__(args);
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args)  {
+                return self.__call__(callStack, args);
             }
         });
     }
     
     @Override
-    public PyObject __call__(ArrayList<PyObject> args)  {
+    public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args)  {
         throw new PyException(ExceptionType.PYILLEGALOPERATIONEXCEPTION, "Cannot call __call__ on PyCallableAdapter object");
     }
     

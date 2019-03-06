@@ -53,7 +53,7 @@ public class PyBool extends PyPrimitiveTypeAdapter {
 
         funs.put("__hash__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 1) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 1 argument, got " + args.size());
@@ -67,7 +67,7 @@ public class PyBool extends PyPrimitiveTypeAdapter {
 
         funs.put("__add__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
 
                 if (args.size() != 2) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
@@ -78,14 +78,14 @@ public class PyBool extends PyPrimitiveTypeAdapter {
                 ArrayList<PyObject> newargs = new ArrayList<>();
                 newargs.add(args.get(0));
 
-                return (new PyInt(self.getIntVal())).callMethod("__add__", newargs);
+                return (new PyInt(self.getIntVal())).callMethod(callStack,"__add__", newargs);
 
             }
         });
 
         funs.put("__sub__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
 
                 if (args.size() != 2) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
@@ -96,13 +96,13 @@ public class PyBool extends PyPrimitiveTypeAdapter {
                 ArrayList<PyObject> newargs = new ArrayList<>();
                 newargs.add(args.get(0));
 
-                return (new PyInt(self.getIntVal())).callMethod("__sub__", newargs);
+                return (new PyInt(self.getIntVal())).callMethod(callStack,"__sub__", newargs);
             }
         });
 
         funs.put("__mul__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
 
                 if (args.size() != 2) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
@@ -113,14 +113,14 @@ public class PyBool extends PyPrimitiveTypeAdapter {
                 ArrayList<PyObject> newargs = new ArrayList<>();
                 newargs.add(args.get(0));
 
-                return (new PyInt(self.getIntVal())).callMethod("__mul__", newargs);
+                return (new PyInt(self.getIntVal())).callMethod(callStack,"__mul__", newargs);
 
             }
         });
 
         funs.put("__truediv__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
 
                 if (args.size() != 2) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
@@ -131,14 +131,14 @@ public class PyBool extends PyPrimitiveTypeAdapter {
                 ArrayList<PyObject> newargs = new ArrayList<>();
                 newargs.add(args.get(0));
 
-                return (new PyInt(self.getIntVal())).callMethod("__truediv__", newargs);
+                return (new PyInt(self.getIntVal())).callMethod(callStack,"__truediv__", newargs);
 
             }
         });
 
         funs.put("__floordiv__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
 
                 if (args.size() != 2) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
@@ -149,14 +149,14 @@ public class PyBool extends PyPrimitiveTypeAdapter {
                 ArrayList<PyObject> newargs = new ArrayList<>();
                 newargs.add(args.get(0));
 
-                return (new PyInt(self.getIntVal())).callMethod("__floordiv__", newargs);
+                return (new PyInt(self.getIntVal())).callMethod(callStack,"__floordiv__", newargs);
 
             }
         });
 
         funs.put("__mod__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
 
                 if (args.size() != 2) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
@@ -167,14 +167,14 @@ public class PyBool extends PyPrimitiveTypeAdapter {
                 ArrayList<PyObject> newargs = new ArrayList<>();
                 newargs.add(args.get(0));
 
-                return (new PyInt(self.getIntVal())).callMethod("__mod__", newargs);
+                return (new PyInt(self.getIntVal())).callMethod(callStack,"__mod__", newargs);
 
             }
         });
 
         funs.put("__eq__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 2 arguments, got " + args.size());
@@ -184,13 +184,13 @@ public class PyBool extends PyPrimitiveTypeAdapter {
                 ArrayList<PyObject> newargs = new ArrayList<>();
                 newargs.add(args.get(0));
 
-                return (new PyInt(self.getIntVal())).callMethod("__eq__", newargs);
+                return (new PyInt(self.getIntVal())).callMethod(callStack,"__eq__", newargs);
             }
         });
 
         funs.put("__ne__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 2 arguments, got " + args.size());
@@ -200,13 +200,13 @@ public class PyBool extends PyPrimitiveTypeAdapter {
                 ArrayList<PyObject> newargs = new ArrayList<>();
                 newargs.add(args.get(0));
 
-                return (new PyInt(self.getIntVal())).callMethod("__ne__", newargs);
+                return (new PyInt(self.getIntVal())).callMethod(callStack,"__ne__", newargs);
             }
         });
 
         funs.put("__lt__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 2 arguments, got " + args.size());
@@ -216,13 +216,13 @@ public class PyBool extends PyPrimitiveTypeAdapter {
                 ArrayList<PyObject> newargs = new ArrayList<>();
                 newargs.add(args.get(0));
 
-                return (new PyInt(self.getIntVal())).callMethod("__lt__", newargs);
+                return (new PyInt(self.getIntVal())).callMethod(callStack,"__lt__", newargs);
             }
         });
 
         funs.put("__le__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 2 arguments, got " + args.size());
@@ -232,13 +232,13 @@ public class PyBool extends PyPrimitiveTypeAdapter {
                 ArrayList<PyObject> newargs = new ArrayList<>();
                 newargs.add(args.get(0));
 
-                return (new PyInt(self.getIntVal())).callMethod("__le__", newargs);
+                return (new PyInt(self.getIntVal())).callMethod(callStack,"__le__", newargs);
             }
         });
 
         funs.put("__gt__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 2 arguments, got " + args.size());
@@ -248,13 +248,13 @@ public class PyBool extends PyPrimitiveTypeAdapter {
                 ArrayList<PyObject> newargs = new ArrayList<>();
                 newargs.add(args.get(0));
 
-                return (new PyInt(self.getIntVal())).callMethod("__gt__", newargs);
+                return (new PyInt(self.getIntVal())).callMethod(callStack,"__gt__", newargs);
             }
         });
 
         funs.put("__ge__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 2) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 2 arguments, got " + args.size());
@@ -264,13 +264,13 @@ public class PyBool extends PyPrimitiveTypeAdapter {
                 ArrayList<PyObject> newargs = new ArrayList<>();
                 newargs.add(args.get(0));
 
-                return (new PyInt(self.getIntVal())).callMethod("__ge__", newargs);
+                return (new PyInt(self.getIntVal())).callMethod(callStack,"__ge__", newargs);
             }
         });
 
         funs.put("__float__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 1) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 1 argument, got " + args.size());
@@ -284,7 +284,7 @@ public class PyBool extends PyPrimitiveTypeAdapter {
 
         funs.put("__int__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 1) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeErro: expected 1 argument, got " + args.size());
@@ -298,7 +298,7 @@ public class PyBool extends PyPrimitiveTypeAdapter {
 
         funs.put("__bool__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 1) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeErro: expected 1 argument, got " + args.size());

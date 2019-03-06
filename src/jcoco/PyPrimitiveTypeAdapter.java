@@ -36,7 +36,7 @@ public class PyPrimitiveTypeAdapter extends PyObjectAdapter {
 
         funs.put("__str__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 1) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 1 argument, got " + args.size());
@@ -50,7 +50,7 @@ public class PyPrimitiveTypeAdapter extends PyObjectAdapter {
 
         funs.put("__hash__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 1) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 1 argument, got " + args.size());
@@ -65,7 +65,7 @@ public class PyPrimitiveTypeAdapter extends PyObjectAdapter {
 
         funs.put("__repr__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 1) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 1 argument, got " + args.size());
@@ -73,13 +73,13 @@ public class PyPrimitiveTypeAdapter extends PyObjectAdapter {
 
                 PyPrimitiveTypeAdapter self = (PyPrimitiveTypeAdapter) args.get(args.size() - 1);
 
-                return self.callMethod("__str__", newargs());
+                return self.callMethod(callStack,"__str__", newargs());
             }
         });
 
         funs.put("__iter__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 1) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 1 argument, got " + args.size());
@@ -94,7 +94,7 @@ public class PyPrimitiveTypeAdapter extends PyObjectAdapter {
 
         funs.put("__type__", new PyCallableAdapter() {
             @Override
-            public PyObject __call__(ArrayList<PyObject> args) {
+            public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
                 if (args.size() != 1) {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 1 argument, got " + args.size());

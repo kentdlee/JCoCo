@@ -39,7 +39,7 @@ public class PyBuiltInConcat extends PyCallableAdapter {
     }
     
     @Override
-    public PyObject __call__(ArrayList<PyObject> args)  {
+    public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args)  {
         if (args.size() != 1) {
             throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                                     "TypeError: expected 1 argument, got "+args.size());
@@ -49,6 +49,6 @@ public class PyBuiltInConcat extends PyCallableAdapter {
         
         ArrayList<PyObject> callArgs = new ArrayList<PyObject>();
         
-        return x.callMethod("concat", callArgs);
+        return x.callMethod(callStack,"concat", callArgs);
     }
 }

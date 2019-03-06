@@ -66,7 +66,7 @@ public class PyBuiltInTPrint extends PyCallableAdapter {
     }
     
     @Override
-    public PyObject __call__(ArrayList<PyObject> args) {
+    public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
         String output = "";
         PyObject x;
         PyObject w;
@@ -84,7 +84,7 @@ public class PyBuiltInTPrint extends PyCallableAdapter {
                                 
             for (int i = tup.size()-1; i >= 0; i--) {
                 x = tup.getVal(i);
-                w = x.callMethod("__str__", strargs);
+                w = x.callMethod(callStack,"__str__", strargs);
                 if (x.getType().typeId() == PyTypeId.PyStrType) {
                     output = process(w.str()) + output;
                 } else {

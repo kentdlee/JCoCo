@@ -66,7 +66,7 @@ public class PyBuiltInFPrint extends PyCallableAdapter {
     }
     
     @Override
-    public PyObject __call__(ArrayList<PyObject> args)  {
+    public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args)  {
         String output = "";
         PyObject x;
         PyObject w;

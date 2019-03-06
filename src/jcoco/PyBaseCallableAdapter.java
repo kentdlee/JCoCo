@@ -23,7 +23,7 @@ public class PyBaseCallableAdapter implements PyCallable {
     }
 
     @Override
-    public PyObject __call__(ArrayList<PyObject> args) {
+    public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args) {
         throw new PyException(PyException.ExceptionType.PYILLEGALOPERATIONEXCEPTION, "Cannot call __call__ on PyCallableAdapter object"); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -33,7 +33,7 @@ public class PyBaseCallableAdapter implements PyCallable {
     }
 
     @Override
-    public PyObject callMethod(String name, ArrayList<PyObject> args) {
+    public PyObject callMethod(PyCallStack callStack, String name, ArrayList<PyObject> args) {
         throw new PyException(PyException.ExceptionType.PYILLEGALOPERATIONEXCEPTION, "Cannot call __call__ on PyCallableAdapter object"); //To change body of generated methods, choose Tools | Templates.
     }
 
