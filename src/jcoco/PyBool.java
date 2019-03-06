@@ -22,7 +22,7 @@ public class PyBool extends PyPrimitiveTypeAdapter {
 
     private boolean val;
 
-    public PyBool(boolean b) {
+    public PyBool(boolean b) { 
         super("bool", PyTypeId.PyBoolType);
         this.val = b;
         initMethods(funs());
@@ -32,10 +32,10 @@ public class PyBool extends PyPrimitiveTypeAdapter {
     public String str() {
         if (val)
             return "True";
-
+       
         return "False";
     }
-
+    
     public boolean getVal() {
         return this.val;
     }
@@ -58,7 +58,7 @@ public class PyBool extends PyPrimitiveTypeAdapter {
                     throw new PyException(PyException.ExceptionType.PYWRONGARGCOUNTEXCEPTION,
                             "TypeError: expected 1 argument, got " + args.size());
                 }
-
+                
                 PyBool self = (PyBool) args.get(args.size() - 1);
 
                 return new PyInt(self.getIntVal());
@@ -78,7 +78,7 @@ public class PyBool extends PyPrimitiveTypeAdapter {
                 ArrayList<PyObject> newargs = new ArrayList<>();
                 newargs.add(args.get(0));
 
-                return (new PyInt(self.getIntVal())).callMethod("__add__", newargs);
+                return (new PyInt(self.getIntVal())).callMethod(callStack,"__add__", newargs);
 
             }
         });
@@ -96,7 +96,7 @@ public class PyBool extends PyPrimitiveTypeAdapter {
                 ArrayList<PyObject> newargs = new ArrayList<>();
                 newargs.add(args.get(0));
 
-                return (new PyInt(self.getIntVal())).callMethod("__sub__", newargs);
+                return (new PyInt(self.getIntVal())).callMethod(callStack,"__sub__", newargs);
             }
         });
 
@@ -113,7 +113,7 @@ public class PyBool extends PyPrimitiveTypeAdapter {
                 ArrayList<PyObject> newargs = new ArrayList<>();
                 newargs.add(args.get(0));
 
-                return (new PyInt(self.getIntVal())).callMethod("__mul__", newargs);
+                return (new PyInt(self.getIntVal())).callMethod(callStack,"__mul__", newargs);
 
             }
         });
@@ -131,7 +131,7 @@ public class PyBool extends PyPrimitiveTypeAdapter {
                 ArrayList<PyObject> newargs = new ArrayList<>();
                 newargs.add(args.get(0));
 
-                return (new PyInt(self.getIntVal())).callMethod("__truediv__", newargs);
+                return (new PyInt(self.getIntVal())).callMethod(callStack,"__truediv__", newargs);
 
             }
         });
@@ -149,7 +149,7 @@ public class PyBool extends PyPrimitiveTypeAdapter {
                 ArrayList<PyObject> newargs = new ArrayList<>();
                 newargs.add(args.get(0));
 
-                return (new PyInt(self.getIntVal())).callMethod("__floordiv__", newargs);
+                return (new PyInt(self.getIntVal())).callMethod(callStack,"__floordiv__", newargs);
 
             }
         });
@@ -167,7 +167,7 @@ public class PyBool extends PyPrimitiveTypeAdapter {
                 ArrayList<PyObject> newargs = new ArrayList<>();
                 newargs.add(args.get(0));
 
-                return (new PyInt(self.getIntVal())).callMethod("__mod__", newargs);
+                return (new PyInt(self.getIntVal())).callMethod(callStack,"__mod__", newargs);
 
             }
         });
@@ -184,7 +184,7 @@ public class PyBool extends PyPrimitiveTypeAdapter {
                 ArrayList<PyObject> newargs = new ArrayList<>();
                 newargs.add(args.get(0));
 
-                return (new PyInt(self.getIntVal())).callMethod("__eq__", newargs);
+                return (new PyInt(self.getIntVal())).callMethod(callStack,"__eq__", newargs);
             }
         });
 
@@ -200,7 +200,7 @@ public class PyBool extends PyPrimitiveTypeAdapter {
                 ArrayList<PyObject> newargs = new ArrayList<>();
                 newargs.add(args.get(0));
 
-                return (new PyInt(self.getIntVal())).callMethod("__ne__", newargs);
+                return (new PyInt(self.getIntVal())).callMethod(callStack,"__ne__", newargs);
             }
         });
 
@@ -216,7 +216,7 @@ public class PyBool extends PyPrimitiveTypeAdapter {
                 ArrayList<PyObject> newargs = new ArrayList<>();
                 newargs.add(args.get(0));
 
-                return (new PyInt(self.getIntVal())).callMethod("__lt__", newargs);
+                return (new PyInt(self.getIntVal())).callMethod(callStack,"__lt__", newargs);
             }
         });
 
@@ -232,7 +232,7 @@ public class PyBool extends PyPrimitiveTypeAdapter {
                 ArrayList<PyObject> newargs = new ArrayList<>();
                 newargs.add(args.get(0));
 
-                return (new PyInt(self.getIntVal())).callMethod("__le__", newargs);
+                return (new PyInt(self.getIntVal())).callMethod(callStack,"__le__", newargs);
             }
         });
 
@@ -248,7 +248,7 @@ public class PyBool extends PyPrimitiveTypeAdapter {
                 ArrayList<PyObject> newargs = new ArrayList<>();
                 newargs.add(args.get(0));
 
-                return (new PyInt(self.getIntVal())).callMethod("__gt__", newargs);
+                return (new PyInt(self.getIntVal())).callMethod(callStack,"__gt__", newargs);
             }
         });
 
@@ -264,7 +264,7 @@ public class PyBool extends PyPrimitiveTypeAdapter {
                 ArrayList<PyObject> newargs = new ArrayList<>();
                 newargs.add(args.get(0));
 
-                return (new PyInt(self.getIntVal())).callMethod("__ge__", newargs);
+                return (new PyInt(self.getIntVal())).callMethod(callStack,"__ge__", newargs);
             }
         });
 
@@ -309,7 +309,7 @@ public class PyBool extends PyPrimitiveTypeAdapter {
                 return self;
             }
         });
-
+        
         return funs;
     }
 }

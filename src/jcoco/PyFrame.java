@@ -137,7 +137,7 @@ class PyFrame extends PyObjectAdapter {
         return this.PC;
     }
 
-    public String hashMapToString(HashMap theMap) {
+  public String hashMapToString(HashMap theMap) {
         // temporarily turn off stepping if it is on.
         boolean debugging = JCoCo.stepOverInstructions;
         JCoCo.stepOverInstructions = false;
@@ -150,10 +150,9 @@ class PyFrame extends PyObjectAdapter {
 
         for (String key : map.keySet()) {
             try {
-                t = (PyStr) map.get(key).callMethod("__repr__", new ArrayList<PyObject>());
+                t = (PyStr) map.get(key).callMethod(new PyCallStack(), "__repr__", new ArrayList<PyObject>());
                 t_str = t.str();
             } catch (PyException ex) {
-                JCoCo.callStack.pop(); // get rid of bad stack frame put there by debugger.
                 try {
                     t_str = ((PyObject) map.get(key)).str();
                 } catch (PyException ex2) {

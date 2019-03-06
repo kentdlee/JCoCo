@@ -89,47 +89,40 @@ public class PyStack<T> {
     // This is used only by debugging to leave out marker objects when looking at the
     // operand stack. This is specific to JCoCo.
     public String toStringNoMarkers() {
-       // temporarily turn off stepping if it is on.
-       boolean debugging = JCoCo.stepOverInstructions;
-       JCoCo.stepOverInstructions = false;
+        // temporarily turn off stepping if it is on.
+        boolean debugging = JCoCo.stepOverInstructions;
+        JCoCo.stepOverInstructions = false;
 
-       int callStackSize = JCoCo.callStack.size();
+        StringBuffer out = new StringBuffer();
 
-       StringBuffer out = new StringBuffer();
+        out.append("top\n---\n");
 
-       out.append("top\n---\n");
+        __PyStackElement<T> cursor;
 
-       __PyStackElement<T> cursor;
+        cursor = this.tos;
 
-       cursor = this.tos;
+        while (cursor != null) {
+            if (!cursor.object.toString().equals("Marker")) {
+                try {
+                    out.append(cursor.object + "\n");
+                } catch (PyException ex) {
+                    try {
+                        out.append(((PyObject) cursor.object).str() + "\n");
+                    } catch (PyException ex2) {
+                        out.append("<" + ((PyObject) cursor.object).getType() + " object at 0x" + Integer.toHexString(System.identityHashCode(this)) + ">\n");
+                    }
+                }
+            }
+            cursor = cursor.next;
+        }
 
-       while (cursor != null) {
-           if (!cursor.object.toString().equals("Marker")) {
-               try {
-                   out.append(cursor.object + "\n");
-               } catch (PyException ex) {
-                   try {
-                       out.append(((PyObject) cursor.object).str() + "\n");
-                   } catch (PyException ex2) {
-                       out.append("<" + ((PyObject) cursor.object).getType() + " object at 0x" + Integer.toHexString(System.identityHashCode(this)) + ">\n");
-                   }
-               }
-           }
-           cursor = cursor.next;
-       }
+        out.append("---\n");
 
-       out.append("---\n");
+        // restore step over debugging if active.
+        JCoCo.stepOverInstructions = debugging;
 
-       // restore step over debugging if active.
-       JCoCo.stepOverInstructions = debugging;
-
-       while (JCoCo.callStack.size() > callStackSize) {
-           JCoCo.callStack.pop(); // restore call stack after debugging.
-       }
-
-       return out.toString();
-   }
-
+        return out.toString();
+    }
 
     public int getCount() {
         return this.count;
