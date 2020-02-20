@@ -8,10 +8,10 @@
  * KIND.
  *
  * Description:
- * This is the built-in input function from Python. It takes one argument, 
+ * This is the built-in input function from Python. It takes one argument,
  * a string prompt, and returns a string read from standard input. Only one of
  * these objects is created when JCoCo starts and "input" is mapped to it in the
- * globals. 
+ * globals.
  */
 package jcoco;
 
@@ -25,18 +25,18 @@ public class PyBuiltInInput extends PyCallableAdapter {
     public PyBuiltInInput() {
         super();
     }
-    
+
     @Override
     public PyType getType() {
         return JCoCo.PyTypes.get(PyTypeId.PyBuiltInType);
     }
-    
+
     @Override
     public String str() {
         return "<built-in function input>";
     }
-    
-    @Override 
+
+    @Override
     public PyObject __call__(PyCallStack callStack, ArrayList<PyObject> args)  {
         PyObject x;
         PyStr y;
@@ -44,24 +44,24 @@ public class PyBuiltInInput extends PyCallableAdapter {
 
         if (args.size() != 1) {
             throw new PyException(ExceptionType.PYWRONGARGCOUNTEXCEPTION,
-                                "TypeError: expected 1 arguments, got"+args.size());
+                                "TypeError: expected 1 arguments, got "+args.size());
         }
-        
+
         x = args.get(0);
-        
+
         if (x.getType().typeId() != PyTypeId.PyStrType) {
             throw new PyException(ExceptionType.PYILLEGALOPERATIONEXCEPTION,
                                     "Invalid argument to input(): expected str, found "+x.getType().str());
         }
-        
+
         y = (PyStr)x;
-        
+
         System.out.print(y.str());
-        
-        //Only one scanner can be created in Java due to some problem when 
-        //creating multiple. 
+
+        //Only one scanner can be created in Java due to some problem when
+        //creating multiple.
         line = JCoCo.scanner.nextLine();
-        
-        return new PyStr(line);     
-    } 
+
+        return new PyStr(line);
+    }
 }
