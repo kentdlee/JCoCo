@@ -633,6 +633,16 @@ public class PyParser {
                 badToken(tok1, "Illegal Opcode.");
             }
         }
+        if(tok1.getType()==TokenType.PYHASHTOKEN && tok2.getType() == TokenType.PYINTEGERTOKEN){
+            try{
+                return  new PyByteCode(tok1Lex,tok2Lex);
+            } catch (NumberFormatException e) {
+                System.err.println(e);
+                System.exit(0);
+            } catch (Exception e) {
+                badToken(tok1, "Illegal Opcode.");
+            }
+        }
 
         badToken(tok1, "Instruction Syntax Error.");
 
