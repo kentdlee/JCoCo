@@ -14,7 +14,7 @@
  * PyType for all PyInt objects. All PyInt objects, when their type is requested
  * (via the type function) return the one instance of the PyInt type. This is
  * found by looking up the instance in the PyTypes map that is declared at the
- * bottom of this header file. The main.cpp code initializes this map.
+ * bottom of this header file. The JCoCo.Java code initializes this map.
  */
 package jcoco;
 
